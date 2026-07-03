@@ -279,7 +279,7 @@
             // Interpolar manualmente
             const startTime = Date.now();
             function interpolate() {
-                const elapsed = (Date.now() - startTime) / 1000;
+                const elapsed = (Date.now() - startTime) / 1600;
                 const progress = Math.min(elapsed / duration, 1);
                 
                 // Easing suave
@@ -345,7 +345,7 @@
             
             // Rotación suave
             if (particlesMesh) {
-                particlesMesh.rotation.y += 0.001;
+                particlesMesh.rotation.y += 0.01;
             }
             
             renderer.render(scene, camera);
