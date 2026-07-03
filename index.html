@@ -11,24 +11,74 @@
 </head>
 <body>
 
-<a name="top" id="top"></a>
-<h1><a href="//twitter.com/ycwhk" target="_top">hi</a></h1>
-<article>
-  <h2>{ <a href="#about">scroll to bottom</a> }</h2>
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam metus ligula, vestibulum rhoncus elementum ut, consectetur vel justo. Nulla varius sapien odio, quis luctus magna ultricies ut. Vivamus commodo massa vitae turpis laoreet, id pretium massa ultrices. Vivamus accumsan consectetur tortor at condimentum. Etiam hendrerit eget lacus sit amet pulvinar. Praesent ac ipsum molestie, posuere purus at, hendrerit quam. In id tellus ante. Praesent semper malesuada cursus. Suspendisse potenti. Fusce viverra nulla sit amet mauris vulputate venenatis. Sed et eros eget sapien bibendum tristique. Nam eleifend ultrices tincidunt. Nam viverra dui ac turpis faucibus vestibulum.</p>
-</article>
-<article>
-  <h2>{ add as many &lt; article &gt; as you like }</h2>
-  <p>Cras volutpat, tellus pretium commodo dignissim, elit ante pharetra risus, et tempus ligula felis ac libero. Nulla eget pulvinar arcu. Quisque nec risus ultricies dolor mattis egestas ac et nibh. Suspendisse vestibulum ligula non est porttitor consequat. Nulla at magna sed sem tincidunt efficitur a non felis. Praesent vehicula neque sed tellus consectetur, non cursus quam lobortis. Pellentesque id eleifend dui. Ut viverra, ante iaculis eleifend blandit, felis mauris fermentum nunc, in volutpat est diam vitae ipsum. Phasellus pellentesque justo quam, vitae tempor quam imperdiet eget. Donec bibendum a risus id elementum. Vestibulum aliquet porttitor eros, ac facilisis metus fermentum ac. Praesent scelerisque tincidunt hendrerit. Proin dignissim lobortis purus, sit amet vulputate ex rhoncus ac.</p>
-</article>
-<article>
-  <h2><a name="about" id="about">About { <a href="#top">Back to Top</a> }</a></h2>
-  <ul> 
-    <li>Code by <a href="//twitter.com/ycwhk" target="_top">@ycwhk</a></li>
-    <li>Photo by <a href="//unsplash.com/photos/DN08A8Br6rM" target="_top">Marcel Strauß</a></li>
-  </ul>
-</article>
+<div class="mzaCarousel" id="mzaCarousel" aria-roledescription="carousel" aria-label="Featured cards">
+  <div class="mzaCarousel-viewport" tabindex="0">
+    <div class="mzaCarousel-track">
+      <article class="mzaCarousel-slide" role="group" aria-roledescription="slide" aria-label="1 of 5">
+        <div class="mzaCard" style="--mzaCard-bg:url('https://picsum.photos/id/1015/1600/1000');">
+          <header class="mzaCard-head mzaPar-1">
+            <h2 class="mzaCard-title">Edge Visuals</h2>
+            <p class="mzaCard-kicker">Design systems that breathe</p>
+          </header>
+          <p class="mzaCard-text mzaPar-2">Build adaptive UI foundations with tokens, motion, and accessible color ramps. Ship faster without sameness.</p>
+          <footer class="mzaCard-actions mzaPar-3"><button class="mzaBtn">See case study</button></footer>
+        </div>
+      </article>
 
+      <article class="mzaCarousel-slide" role="group" aria-roledescription="slide" aria-label="2 of 5">
+        <div class="mzaCard" style="--mzaCard-bg:url('https://picsum.photos/id/1011/1600/1000');">
+          <header class="mzaCard-head mzaPar-1">
+            <h2 class="mzaCard-title">Realtime Dashboards</h2>
+            <p class="mzaCard-kicker">Signal over noise</p>
+          </header>
+          <p class="mzaCard-text mzaPar-2">Stream metrics, smooth spikes, and highlight deltas. Clarity first, chrome last.</p>
+          <footer class="mzaCard-actions mzaPar-3"><button class="mzaBtn">View live demo</button></footer>
+        </div>
+      </article>
+
+      <article class="mzaCarousel-slide" role="group" aria-roledescription="slide" aria-label="3 of 5">
+        <div class="mzaCard" style="--mzaCard-bg:url('https://picsum.photos/id/1018/1600/1000');">
+          <header class="mzaCard-head mzaPar-1">
+            <h2 class="mzaCard-title">Brand Motion</h2>
+            <p class="mzaCard-kicker">Identity in motion</p>
+          </header>
+          <p class="mzaCard-text mzaPar-2">Translate marks into kinetic systems. Timing, easing, and restraint create memory.</p>
+          <footer class="mzaCard-actions mzaPar-3"><button class="mzaBtn">Explore reels</button></footer>
+        </div>
+      </article>
+
+      <article class="mzaCarousel-slide" role="group" aria-roledescription="slide" aria-label="4 of 5">
+        <div class="mzaCard" style="--mzaCard-bg:url('https://picsum.photos/id/1021/1600/1000');">
+          <header class="mzaCard-head mzaPar-1">
+            <h2 class="mzaCard-title">E-commerce UX</h2>
+            <p class="mzaCard-kicker">Frictionless paths</p>
+          </header>
+          <p class="mzaCard-text mzaPar-2">Model intent, compress choice, and keep the dopamine loop honest. Checkout in one breath.</p>
+          <footer class="mzaCard-actions mzaPar-3"><button class="mzaBtn">See patterns</button></footer>
+        </div>
+      </article>
+
+      <article class="mzaCarousel-slide" role="group" aria-roledescription="slide" aria-label="5 of 5">
+        <div class="mzaCard" style="--mzaCard-bg:url('https://picsum.photos/id/1005/1600/1000');">
+          <header class="mzaCard-head mzaPar-1">
+            <h2 class="mzaCard-title">Content Engines</h2>
+            <p class="mzaCard-kicker">Scale without sludge</p>
+          </header>
+          <p class="mzaCard-text mzaPar-2">Structured content, image policy, and smart defaults. Publish daily, stay sharp.</p>
+          <footer class="mzaCard-actions mzaPar-3"><button class="mzaBtn">Read playbook</button></footer>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <div class="mzaCarousel-controls" aria-label="Controls">
+    <button class="mzaCarousel-prev" aria-label="Previous slide" type="button">‹</button>
+    <button class="mzaCarousel-next" aria-label="Next slide" type="button">›</button>
+  </div>
+
+  <div class="mzaCarousel-pagination" role="tablist" aria-label="Slide navigation"></div>
+  <div class="mzaCarousel-progress" aria-hidden="true"><span class="mzaCarousel-progressBar"></span></div>
+</div>
 <script type="module" src="script.js"></script>
 
 </body>
