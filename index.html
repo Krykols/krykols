@@ -80,23 +80,47 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
     <script>
-        // Configuración
+        // ============================================
+        // CONFIGURACIÓN
+        // ============================================
         const config = {
             particleSize: 1.44,
             particleCount: 30000,
             assembleDuration: 3,
             explodeDuration: 2,
+            rotationSpeed: 0.01,
             svgPath: 'assets/images/Tarjeta-de-presentación-Detras.svg',
             svgWidth: 512,
             svgHeight: 512
         };
 
-        let scene, camera, renderer, particles;
+        // ============================================
+        // VARIABLES GLOBALES
+        // ============================================
+        let scene, camera, renderer, particlesMesh;
         let targetPositions = [];
-        let particlesMesh;
         let isLoaded = false;
 
-        // Inicializar Three.js
+        // Variables para interacción con mouse/touch
+        let currentRotSpeedX = 0;
+        let currentRotSpeedY = config.rotationSpeed;
+        let targetRotSpeedX = 0;
+        let targetRotSpeedY = config.rotationSpeed;
+        let lastMouseX = 0;
+        let lastMouseY = 0;
+        let isInteracting = false;
+        let returnTimeout = null;
+
+        // ============================================
+        // INTERPOLACIÓN SUAVE
+        // ============================================
+        function lerp(start, end, amount) {
+            return start + (end - start) * amount;
+        }
+
+        // ============================================
+        // INICIALIZACIÓN
+        // ============================================
         function init() {
             const container = document.getElementById('canvas-container');
             
@@ -116,17 +140,80 @@
             renderer.setPixelRatio(window.devicePixelRatio);
             container.appendChild(renderer.domElement);
 
-            // Cargar SVG y crear partículas
+            // Cargar SVG
             loadSVGAndCreateParticles();
 
-            // Animar
+            // Iniciar animación
             animate();
+
+            // Event listeners para mouse/touch
+            window.addEventListener('mousemove', onMouseMove);
+            window.addEventListener('touchmove', onTouchMove, { passive: false });
+            window.addEventListener('mousedown', onPointerStart);
+            window.addEventListener('touchstart', onPointerStart);
 
             // Resize
             window.addEventListener('resize', onWindowResize);
         }
 
-        // Cargar SVG desde archivo
+        // ============================================
+        // INTERACCIÓN MOUSE/TOUCH
+        // ============================================
+        function onPointerStart(e) {
+            if (e.touches) {
+                lastMouseX = e.touches[0].clientX;
+                lastMouseY = e.touches[0].clientY;
+            } else {
+                lastMouseX = e.clientX;
+                lastMouseY = e.clientY;
+            }
+        }
+
+        function onMouseMove(e) {
+            const deltaX = e.clientX - lastMouseX;
+            const deltaY = e.clientY - lastMouseY;
+            
+            targetRotSpeedY = deltaX * 0.001;
+            targetRotSpeedX = deltaY * 0.001;
+            
+            lastMouseX = e.clientX;
+            lastMouseY = e.clientY;
+            
+            isInteracting = true;
+            
+            clearTimeout(returnTimeout);
+            returnTimeout = setTimeout(() => {
+                isInteracting = false;
+                targetRotSpeedY = config.rotationSpeed;
+                targetRotSpeedX = 0;
+            }, 1000);
+        }
+
+        function onTouchMove(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const deltaX = touch.clientX - lastMouseX;
+            const deltaY = touch.clientY - lastMouseY;
+            
+            targetRotSpeedY = deltaX * 0.003;
+            targetRotSpeedX = deltaY * 0.003;
+            
+            lastMouseX = touch.clientX;
+            lastMouseY = touch.clientY;
+            
+            isInteracting = true;
+            
+            clearTimeout(returnTimeout);
+            returnTimeout = setTimeout(() => {
+                isInteracting = false;
+                targetRotSpeedY = config.rotationSpeed;
+                targetRotSpeedX = 0;
+            }, 1000);
+        }
+
+        // ============================================
+        // CARGAR SVG
+        // ============================================
         async function loadSVGAndCreateParticles() {
             try {
                 const response = await fetch(config.svgPath);
@@ -136,17 +223,14 @@
                 const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
                 const svgElement = svgDoc.documentElement;
                 
-                // Obtener dimensiones del SVG
                 const width = parseInt(svgElement.getAttribute('width')) || config.svgWidth;
                 const height = parseInt(svgElement.getAttribute('height')) || config.svgHeight;
                 
-                // Crear canvas temporal
                 const canvas = document.createElement('canvas');
                 const ctx = canvas.getContext('2d');
                 canvas.width = width;
                 canvas.height = height;
                 
-                // Convertir SVG a imagen
                 const svgBlob = new Blob([svgText], {type: 'image/svg+xml;charset=utf-8'});
                 const url = URL.createObjectURL(svgBlob);
                 
@@ -155,18 +239,15 @@
                     ctx.drawImage(img, 0, 0, width, height);
                     URL.revokeObjectURL(url);
                     
-                    // Extraer puntos del canvas
                     extractPointsFromCanvas(ctx, width, height);
                     
                     document.getElementById('loading').style.display = 'none';
                     isLoaded = true;
                     
-                    // Auto-ensamblar después de 500ms
                     setTimeout(assemble, 500);
                 };
                 img.onerror = () => {
                     document.getElementById('loading').textContent = 'Error: No se pudo cargar el SVG';
-                    console.error('Error loading SVG');
                 };
                 img.src = url;
                 
@@ -176,55 +257,88 @@
             }
         }
 
-        // Extraer puntos del canvas
-        function extractPointsFromCanvas(ctx, width, height) {
-            const imageData = ctx.getImageData(0, 0, width, height);
-            const data = imageData.data;
-            const points = [];
+// ============================================
+// EXTRAER PUNTOS
+// ============================================
+function extractPointsFromCanvas(ctx, width, height) {
+    const imageData = ctx.getImageData(0, 0, width, height);
+    const data = imageData.data;
+    const points = [];
 
-            // Muestrear píxeles
-            const step = 1; // Menor = más partículas
-            for (let y = 0; y < height; y += step) {
-                for (let x = 0; x < width; x += step) {
-                    const index = (y * width + x) * 4;
-                    const alpha = data[index + 3];
-
-                    if (alpha > 128) {
-                        const r = data[index];
-                        const g = data[index + 1];
-                        const b = data[index + 2];
-                        const color = new THREE.Color(r / 255, g / 255, b / 255);
-
-                        // Centrar en (0, 0) y escalar
-                        const scaleFactor = 400 / Math.max(width, height);
-                        points.push({
-                            x: (x - width / 2) * scaleFactor,
-                            y: -(y - height / 2) * scaleFactor,
-                            z: 0,
-                            color: color
-                        });
-                    }
-                }
-            }
-
-            // Limitar número de partículas
-            if (points.length > config.particleCount) {
-                const step2 = Math.floor(points.length / config.particleCount);
-                const sampled = [];
-                for (let i = 0; i < points.length; i += step2) {
-                    sampled.push(points[i]);
-                }
-                createParticleSystem(sampled);
-            } else {
-                createParticleSystem(points);
+    const step = 1;
+    
+    // ========================================
+    // PASO 1: Calcular el centro de masa real
+    // ========================================
+    let sumX = 0;
+    let sumY = 0;
+    let count = 0;
+    
+    for (let y = 0; y < height; y += step) {
+        for (let x = 0; x < width; x += step) {
+            const index = (y * width + x) * 4;
+            const alpha = data[index + 3];
+            
+            if (alpha > 128) {
+                sumX += x;
+                sumY += y;
+                count++;
             }
         }
+    }
+    
+    // Centro promedio de todos los píxeles visibles
+    const centerX = sumX / count;
+    const centerY = sumY / count;
+    
+    console.log(`Centro calculado: (${centerX.toFixed(1)}, ${centerY.toFixed(1)})`);
+    console.log(`Centro del canvas: (${width/2}, ${height/2})`);
+    
+    // ========================================
+    // PASO 2: Crear puntos usando el centro real
+    // ========================================
+    for (let y = 0; y < height; y += step) {
+        for (let x = 0; x < width; x += step) {
+            const index = (y * width + x) * 4;
+            const alpha = data[index + 3];
 
-        // Crear sistema de partículas
+            if (alpha > 128) {
+                const r = data[index];
+                const g = data[index + 1];
+                const b = data[index + 2];
+                const color = new THREE.Color(r / 255, g / 255, b / 255);
+
+                const scaleFactor = 450 / Math.max(width, height);
+                
+                points.push({
+                    // Usar el centro de masa en lugar de width/2
+                    x: (x - centerX) * scaleFactor,
+                    y: -(y - centerY) * scaleFactor,
+                    z: 0,
+                    color: color
+                });
+            }
+        }
+    }
+
+    if (points.length > config.particleCount) {
+        const step2 = Math.floor(points.length / config.particleCount);
+        const sampled = [];
+        for (let i = 0; i < points.length; i += step2) {
+            sampled.push(points[i]);
+        }
+        createParticleSystem(sampled);
+    } else {
+        createParticleSystem(points);
+    }
+}
+
+        // ============================================
+        // CREAR SISTEMA DE PARTÍCULAS
+        // ============================================
         function createParticleSystem(points) {
             targetPositions = points.map(p => new THREE.Vector3(p.x, p.y, p.z));
             
-            // Posiciones iniciales aleatorias (explodidas)
             const initialPositions = targetPositions.map(() => {
                 const radius = 400 + Math.random() * 200;
                 const theta = Math.random() * Math.PI * 2;
@@ -236,7 +350,6 @@
                 );
             });
 
-            // Geometría
             const geometry = new THREE.BufferGeometry();
             const positions = new Float32Array(initialPositions.length * 3);
             const colors = new Float32Array(initialPositions.length * 3);
@@ -255,7 +368,6 @@
             geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
             geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-            // Material
             const material = new THREE.PointsMaterial({
                 size: config.particleSize,
                 vertexColors: true,
@@ -264,25 +376,24 @@
                 blending: THREE.AdditiveBlending
             });
 
-            // Mesh
             particlesMesh = new THREE.Points(geometry, material);
             scene.add(particlesMesh);
         }
 
-        // Animar partículas a posición objetivo
+        // ============================================
+        // ANIMACIÓN A OBJETIVO
+        // ============================================
         function animateToTargets(targets, duration) {
             if (!particlesMesh) return;
             
             const positions = particlesMesh.geometry.attributes.position.array;
             const startPos = positions.slice();
 
-            // Interpolar manualmente
             const startTime = Date.now();
             function interpolate() {
                 const elapsed = (Date.now() - startTime) / 1600;
                 const progress = Math.min(elapsed / duration, 1);
                 
-                // Easing suave
                 const eased = progress < 0.5 
                     ? 2 * progress * progress 
                     : 1 - Math.pow(-2 * progress + 2, 2) / 2;
@@ -302,14 +413,15 @@
             interpolate();
         }
 
-        // Explotar
+        // ============================================
+        // EXPLOTAR Y ARMAR
+        // ============================================
         function explode() {
             if (!particlesMesh) return;
             
             const positions = particlesMesh.geometry.attributes.position.array;
             const currentTargets = [];
             
-            // Guardar posiciones actuales
             for (let i = 0; i < targetPositions.length; i++) {
                 currentTargets.push(new THREE.Vector3(
                     positions[i * 3],
@@ -318,7 +430,6 @@
                 ));
             }
 
-            // Generar nuevas posiciones aleatorias
             const newPositions = currentTargets.map(() => {
                 const radius = 300 + Math.random() * 300;
                 const theta = Math.random() * Math.PI * 2;
@@ -333,32 +444,48 @@
             animateToTargets(newPositions, config.explodeDuration);
         }
 
-        // Armar
         function assemble() {
             if (!particlesMesh) return;
             animateToTargets(targetPositions, config.assembleDuration);
         }
 
-        // Animación continua
+        // ============================================
+        // ANIMACIÓN CONTINUA (CON INTERACCIÓN)
+        // ============================================
         function animate() {
             requestAnimationFrame(animate);
             
-            // Rotación suave
             if (particlesMesh) {
-                particlesMesh.rotation.y += 0.01;
+                // Posición del eje
+                particlesMesh.position.x = 0;
+                particlesMesh.position.y = 0;
+                particlesMesh.position.z = 100;
+
+                // Interpolar velocidades suavemente
+                const smoothFactor = isInteracting ? 0.1 : 0.03;
+                currentRotSpeedX = lerp(currentRotSpeedX, targetRotSpeedX, smoothFactor);
+                currentRotSpeedY = lerp(currentRotSpeedY, targetRotSpeedY, smoothFactor);
+                
+                // Aplicar rotación
+                particlesMesh.rotation.y += currentRotSpeedY;
+                particlesMesh.rotation.x += currentRotSpeedX;
             }
             
             renderer.render(scene, camera);
         }
 
-        // Resize
+        // ============================================
+        // RESIZE
+        // ============================================
         function onWindowResize() {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         }
 
-        // Iniciar
+        // ============================================
+        // INICIAR
+        // ============================================
         init();
     </script>
 </body>
