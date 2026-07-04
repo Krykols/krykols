@@ -717,7 +717,7 @@ function showNextMessage() {
     if (currentMessageIndex >= loadingMessages.length) {
         // Todos los mensajes mostrados, redirigir
         setTimeout(() => {
-            window.location.href = 'test.html';
+            window.location.href = 'services.html';
         }, 2000);
         return;
     }
@@ -774,7 +774,7 @@ if (msg.isWelcome) {
         setTimeout(() => {
             overlayElement.classList.add('hidden');
             setTimeout(() => {
-                window.location.href = 'test.html';
+                window.location.href = 'services.html';
             }, 500);
         }, 2500);
     }, 100);  // ← Espera 0.8s después de ocultar la barra
