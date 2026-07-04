@@ -41,6 +41,7 @@
             width: 100vw;
             height: 100vh;
             z-index: 1;
+            pointer-events: none;  /* ← AGREGAR: permite clics a través del canvas */
         }
 
         /* ============================================
@@ -53,6 +54,7 @@
             padding: 4rem 2rem;
             max-width: 1200px;
             margin: 0 auto;
+            pointer-events: auto;  /* ← AGREGAR: el contenido sí recibe eventos */
         }
 
         /* Header */
@@ -63,7 +65,7 @@
 
         .header h1 {
             font-size: clamp(2.5rem, 6vw, 5rem);
-            font-weight: 300;
+            font-weight: 500;
             letter-spacing: 0.3em;
             text-transform: uppercase;
             margin-bottom: 1rem;
@@ -179,7 +181,7 @@
 
         .cta-section h2 {
             font-size: clamp(1.5rem, 4vw, 2.5rem);
-            font-weight: 300;
+            font-weight: 500;
             letter-spacing: 0.1em;
             margin-bottom: 1rem;
         }
@@ -411,14 +413,14 @@
         
         // Configuración
         const config = {
-            particleCount: 80,
+            particleCount: 100,
             trailAlpha: 0.08,       // Menor = rastro más largo
             baseSpeed: 0.5,
             randomForce: 0.15,      // Fuerza del movimiento aleatorio
             attractorForce: 0.08,   // Fuerza de atracción
             orbitForce: 0.12,       // Fuerza de órbita
-            mouseForce: 0.2,
-            mouseRadius: 200,
+            mouseForce: 0.4,
+            mouseRadius: 300,
             particleSize: 1.5,
             attractorCount: 4,
             connectionDistance: 120,
@@ -640,23 +642,26 @@
             mouse.active = false;
         });
 
-        // Click para crear explosión de partículas
-        canvas.addEventListener('click', (e) => {
-            for (let i = 0; i < 5; i++) {
-                const p = new Particle();
-                p.x = e.clientX;
-                p.y = e.clientY;
-                p.vx = (Math.random() - 0.5) * 8;
-                p.vy = (Math.random() - 0.5) * 8;
-                p.size = Math.random() * 2 + 1;
-                particles.push(p);
-            }
-            
-            // Mantener límite de partículas
-            if (particles.length > config.particleCount + 50) {
-                particles.splice(0, 5);
-            }
-        });
+        // Event listeners globales (para que funcione en toda la pantalla)
+window.addEventListener('mousemove', (e) => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+    mouse.active = true;
+});
+
+window.addEventListener('mouseleave', () => {
+    mouse.active = false;
+});
+
+window.addEventListener('touchmove', (e) => {
+    mouse.x = e.touches[0].clientX;
+    mouse.y = e.touches[0].clientY;
+    mouse.active = true;
+}, { passive: false });
+
+window.addEventListener('touchend', () => {
+    mouse.active = false;
+});
 
         // Inicializar
         resize();
