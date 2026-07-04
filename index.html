@@ -745,6 +745,11 @@ if (msg.isWelcome) {
     setTimeout(() => {
         messageElement.classList.add('welcome');
         dotsElement.style.display = 'none';
+
+            // ⭐ ACTIVAR EXPLOSIÓN AUTOMÁTICAMENTE
+    setTimeout(() => {
+        explode();
+    }, 1000);  // ← Espera 1 segundo después de mostrar BIENVENIDO
         
         // Redirigir después de la animación
         setTimeout(() => {
