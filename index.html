@@ -12,7 +12,7 @@
         }
 
         body {
-            background: #0a0a0a;
+            background: #fff;
             overflow: hidden;
             font-family: 'Segoe UI', sans-serif;
         }
@@ -37,18 +37,18 @@
         }
 
         .controls {
-            position: fixed;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 100;
-            display: flex;
-            gap: 1rem;
-        }
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 200;  /* ← Cambiado de 100 a 200 (por encima del overlay) */
+    display: flex;
+    gap: 1rem;
+}
 
         button {
-            background: #fff;
-            color: #0a0a0a;
+            background: #000;
+            color: #fff;
             border: none;
             padding: 0.75rem 2rem;
             border-radius: 50px;
@@ -63,15 +63,199 @@
             transform: translateY(-2px);
             box-shadow: 0 10px 30px rgba(226, 192, 68, 0.4);
         }
+        /* ============================================
+   BARRA DE CARGA
+   ============================================ */
+#loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: auto;
+    padding: 2rem;
+    background: rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;  /* ← Cambiado de 9999 a 100 */
+    transition: opacity 0.5s ease;
+    backdrop-filter: blur(1px);
+    pointer-events: none;  /* ← AGREGAR: permite clics a través */
+}
+
+#loading-content {
+    text-align: center;
+    color: #fff;
+    font-family: 'Courier New', monospace;
+    font-size: 1.5rem;
+    position: relative;
+    pointer-events: auto;  /* ← AGREGAR: el contenido sí recibe eventos */
+}
+
+#loading-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#loading-content {
+    text-align: center;
+    color: #fff;
+    font-family: 'Courier New', monospace;
+    font-size: 1.5rem;
+    position: relative;
+}
+
+#loading-message {
+    min-height: 2rem;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+#loading-dots {
+    display: inline-block;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+/* BARRA DE PROGRESO SUTIL */
+#loading-progress-container {
+    position: fixed;
+    bottom: 1rem;  /* ← Encima de los botones (botones están en bottom: 2rem) */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    overflow: hidden;
+    z-index: 100;
+}
+
+#loading-progress-bar {
+    height: 100%;
+    width: 0%;
+    background: #fff;
+    transition: width 0.8s ease;
+    border-radius: 2px;
+}
+
+/* Clase para ocultar la barra suavemente */
+#loading-progress-container.hidden {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px);
+    pointer-events: none;
+}
+
+.dot {
+    opacity: 0;
+    animation: dotBlink 1.5s infinite;
+}
+
+.dot:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.dot:nth-child(2) {
+    animation-delay: 0.3s;
+}
+
+.dot:nth-child(3) {
+    animation-delay: 0.6s;
+}
+
+@keyframes dotBlink {
+    0%, 20% {
+        opacity: 0;
+    }
+    40%, 60% {
+        opacity: 1;
+    }
+    80%, 100% {
+        opacity: 0;
+    }
+}
+
+/* Mensajes completados/listos parpadean */
+.completed {
+    animation: blinkCompleted 0.5s ease-in-out 3;
+    color: #fff;
+    font-weight: bold;
+}
+
+@keyframes blinkCompleted {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.3;
+        transform: scale(1);
+    }
+}
+
+/* Mensaje BIENVENIDO */
+.welcome {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem;
+    font-weight: bold;
+    color: #fff;
+    animation: welcomeAnimation 3s ease-in-out forwards;
+    z-index: 300;  /* ← AGREGAR: por encima de todo */
+}
+
+@keyframes welcomeAnimation {
+    0% {
+        font-size: 2rem;
+        opacity: 0;
+        transform: translate(-50%, -50%);
+    }
+    30% {
+        font-size: 3rem;
+        opacity: 1;
+        transform: translate(-50%, 1%);
+    }
+    50%, 70%, 90% {
+        opacity: 1;
+        transform: translate(-50%, 3%);
+    }
+    60%, 80%, 100% {
+        opacity: 0.3;
+        transform: translate(-50%, 4%);
+    }
+    100% {
+        font-size: 5rem;
+        opacity: 1;
+        transform: translate(-50%, 5%);
+    }
+}
     </style>
 </head>
 <body>
 
+    <!-- BARRA DE CARGA -->
+<div id="loading-overlay">
+    <div id="loading-content">
+        <div id="loading-message">Iniciando sistema...</div>
+        <div id="loading-dots">
+            <span class="dot">.</span>
+            <span class="dot">.</span>
+            <span class="dot">.</span>
+        </div>
+    </div>
+    <!-- BARRA DE PROGRESO -->
+    <div id="loading-progress-container">
+        <div id="loading-progress-bar"></div>
+    </div>
+</div>
+
     <div id="canvas-container"></div>
     
     <div class="controls">
-        <button onclick="explode()">💥 Explotar</button>
-        <button onclick="assemble()">✨ Armar</button>
+        <button onclick="explode()">Explotar</button>
+        <button onclick="assemble()">Armar</button>
     </div>
 
     <div class="loading" id="loading">Cargando SVG...</div>
@@ -486,6 +670,103 @@ function extractPointsFromCanvas(ctx, width, height) {
         // ============================================
         // INICIAR
         // ============================================
+        // ============================================
+// BARRA DE CARGA - MENSAJES
+// ============================================
+const loadingMessages = [
+    { text: "Escaneando usuario", hasDots: true, isCompleted: false },
+    { text: "Revisando base de datos de usuario", hasDots: true, isCompleted: false },
+    { text: "Registrando usuario automáticamente", hasDots: true, isCompleted: false },
+    { text: "Usuario registrado", hasDots: false, isCompleted: true },
+    { text: "Analizando datos de usuario", hasDots: true, isCompleted: false },
+    { text: "Análisis completado", hasDots: false, isCompleted: true },
+    { text: "Preparando servicios", hasDots: true, isCompleted: false },
+    { text: "Servicios preparados", hasDots: false, isCompleted: true },
+    { text: "Personalizando ofertas", hasDots: true, isCompleted: false },
+    { text: "Ofertas personalizadas", hasDots: false, isCompleted: true },
+    { text: "Cargando portafolio de productos y servicios", hasDots: true, isCompleted: false },
+    { text: "Portafolio de productos y servicios cargado", hasDots: false, isCompleted: true },
+    { text: "Bienvenido", hasDots: false, isCompleted: false, isWelcome: true }
+];
+
+let currentMessageIndex = 0;
+const messageElement = document.getElementById('loading-message');
+const dotsElement = document.getElementById('loading-dots');
+const overlayElement = document.getElementById('loading-overlay');
+
+function showNextMessage() {
+    if (currentMessageIndex >= loadingMessages.length) {
+        // Todos los mensajes mostrados, redirigir
+        setTimeout(() => {
+            window.location.href = 'test.html';
+        }, 2000);
+        return;
+    }
+
+    const msg = loadingMessages[currentMessageIndex];
+    const progressBar = document.getElementById('loading-progress-bar');
+    
+    // Limpiar clases anteriores
+    messageElement.classList.remove('completed', 'welcome');
+    
+    // Mostrar mensaje
+    messageElement.textContent = msg.text;
+    
+    // Mostrar/ocultar puntos
+    if (msg.hasDots) {
+        dotsElement.style.display = 'inline-block';
+    } else {
+        dotsElement.style.display = 'none';
+    }
+    
+    // Actualizar barra de progreso (excepto en BIENVENIDO)
+    if (!msg.isWelcome) {
+        const progress = ((currentMessageIndex + 1) / (loadingMessages.length - 1)) * 100;
+        progressBar.style.width = `${progress}%`;
+    }
+    
+    // Si es mensaje completado, agregar parpadeo
+    if (msg.isCompleted) {
+        setTimeout(() => {
+            messageElement.classList.add('completed');
+        }, 100);
+    }
+    
+    // Si es BIENVENIDO, animación especial
+if (msg.isWelcome) {
+    // Barra al 100%
+    progressBar.style.width = '100%';
+    
+    // Ocultar barra inmediatamente
+    const progressContainer = document.getElementById('loading-progress-container');
+    progressContainer.classList.add('hidden');
+    
+    // Esperar un momento y mostrar BIENVENIDO
+    setTimeout(() => {
+        messageElement.classList.add('welcome');
+        dotsElement.style.display = 'none';
+        
+        // Redirigir después de la animación
+        setTimeout(() => {
+            overlayElement.classList.add('hidden');
+            setTimeout(() => {
+                window.location.href = 'test.html';
+            }, 500);
+        }, 2500);
+    }, 100);  // ← Espera 0.8s después de ocultar la barra
+    
+    return;
+}
+    
+    currentMessageIndex++;
+    
+    // Tiempo para mostrar cada mensaje
+    const delay = msg.isCompleted ? 1500 : 2000;
+    setTimeout(showNextMessage, delay);
+}
+
+// Iniciar barra de carga
+setTimeout(showNextMessage, 500);
         init();
     </script>
 </body>
