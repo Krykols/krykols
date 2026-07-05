@@ -3,16 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Servicios | Kryko</title>
+    <title>Servicios | Krykols</title>
     <style>
-        /* ============================================
-           RESET COMPLETO
-           ============================================ */
-        *, *::before, *::after {
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
         }
 
         html, body {
@@ -24,215 +20,106 @@
             color: #fff;
         }
 
-        @supports (padding: max(0px)) {
-            body {
-                padding-left: env(safe-area-inset-left);
-                padding-right: env(safe-area-inset-right);
-            }
-        }
-
         /* ============================================
-           CANVAS DE FONDO
+           FONDO CON PARTÍCULAS (SUBIENDO) - MÁS GRANDES
            ============================================ */
-        #particle-canvas {
+        #particles-container {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
+            width: 100%;
+            height: 100%;
             z-index: 1;
-            pointer-events: none;  /* ← AGREGAR: permite clics a través del canvas */
-        }
-
-        /* ============================================
-           CONTENIDO
-           ============================================ */
-        .content {
-            position: relative;
-            z-index: 10;
-            min-height: 100vh;
-            padding: 4rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-            pointer-events: auto;  /* ← AGREGAR: el contenido sí recibe eventos */
-        }
-
-        /* Header */
-        .header {
-            text-align: center;
-            padding: 3rem 0 5rem;
-        }
-
-        .header h1 {
-            font-size: clamp(2.5rem, 6vw, 5rem);
-            font-weight: 500;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, #fff 0%, #888 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .header .subtitle {
-            font-size: 1rem;
-            color: #666;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-        }
-
-        .divider {
-            width: 60px;
-            height: 1px;
-            background: #fff;
-            margin: 2rem auto;
-        }
-
-        /* Grid de servicios */
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
-            padding: 2rem 0;
-        }
-
-        .service-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 2.5rem 2rem;
-            border-radius: 4px;
-            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-            position: relative;
             overflow: hidden;
-            backdrop-filter: blur(10px);
         }
 
-        .service-card::before {
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            animation: rise linear infinite;
+            box-shadow: 
+                0 0 10px rgba(255, 255, 255, 0.8),
+                0 0 20px rgba(255, 255, 255, 0.6),
+                0 0 30px rgba(255, 255, 255, 0.4);
+        }
+
+        /* Estela de la partícula */
+        .particle::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #fff, transparent);
-            transform: translateX(-100%);
-            transition: transform 0.6s ease;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            filter: blur(12px);
+            animation: trail 1s ease-out infinite;
         }
 
-        .service-card:hover {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(255, 255, 255, 0.3);
-            transform: translateY(-5px);
+        @keyframes rise {
+            0% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh);
+                opacity: 0;
+            }
         }
 
-        .service-card:hover::before {
-            transform: translateX(100%);
+        @keyframes trail {
+            0% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(3);
+                opacity: 0;
+            }
         }
 
-        .service-number {
-            font-size: 0.875rem;
-            color: #555;
-            letter-spacing: 0.2em;
-            margin-bottom: 1.5rem;
-            font-family: 'Courier New', monospace;
+        /* ============================================
+           CONTENIDO PRINCIPAL
+           ============================================ */
+        #main-content {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
         }
 
-        .service-card h2 {
-            font-size: 1.5rem;
-            font-weight: 400;
-            margin-bottom: 1rem;
-            letter-spacing: 0.05em;
-        }
-
-        .service-card p {
-            color: #888;
-            line-height: 1.7;
-            font-size: 0.95rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .service-features {
-            list-style: none;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 1.5rem;
-        }
-
-        .service-features li {
-            padding: 0.5rem 0;
-            color: #aaa;
-            font-size: 0.875rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .service-features li::before {
-            content: '→';
-            color: #fff;
-            font-size: 0.75rem;
-        }
-
-        /* CTA Section */
-        .cta-section {
+        /* Header */
+        .header {
+            position: fixed;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
             text-align: center;
-            padding: 6rem 0 4rem;
+            width: 100%;
         }
 
-        .cta-section h2 {
-            font-size: clamp(1.5rem, 4vw, 2.5rem);
-            font-weight: 500;
-            letter-spacing: 0.1em;
-            margin-bottom: 1rem;
-        }
-
-        .cta-section p {
-            color: #666;
-            margin-bottom: 2rem;
-            font-size: 1.1rem;
-        }
-
-        .cta-button {
-            display: inline-block;
-            padding: 1rem 3rem;
-            background: #fff;
-            color: #000;
-            text-decoration: none;
-            font-weight: 600;
-            letter-spacing: 0.15em;
+        .header h1 {
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            font-weight: 450;
+            letter-spacing: 0.3em;
             text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .header .subtitle {
             font-size: 0.875rem;
-            border-radius: 2px;
-            transition: all 0.3s ease;
-            border: 2px solid #fff;
-        }
-
-        .cta-button:hover {
-            background: transparent;
-            color: #fff;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
-        }
-
-        .cta-button.outline {
-            background: transparent;
-            color: #fff;
-            margin-left: 1rem;
-        }
-
-        .cta-button.outline:hover {
-            background: #fff;
-            color: #000;
-        }
-
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 3rem 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: #444;
-            font-size: 0.875rem;
-            letter-spacing: 0.1em;
+            color: #666;
+            letter-spacing: 0.2em;
         }
 
         /* Back button */
@@ -248,425 +135,881 @@
             text-transform: uppercase;
             opacity: 0.6;
             transition: opacity 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
         }
 
         .back-link:hover {
             opacity: 1;
         }
 
-        /* Responsive */
+        /* ============================================
+           SECCIÓN PRINCIPAL
+           ============================================ */
+        .services-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 12rem 2rem 4rem;
+            position: relative;
+        }
+
+        /* ============================================
+           MALETÍN PORTFOLIO
+           ============================================ */
+        .portfolio-briefcase {
+            width: 100%;
+            max-width: 900px;
+            position: relative;
+            transform-style: preserve-3d;
+            perspective: 2000px;
+        }
+
+        /* Contenedor del maletín - FONDO TRANSPARENTE */
+        .briefcase-container {
+            position: relative;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.1);
+            border: 3px solid #fff;
+            border-radius: 12px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9);
+            overflow: visible;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Tapa superior - SIN ANIMACIÓN DE ROTACIÓN */
+.briefcase-lid {
+    position: relative;
+    height: 200px;
+    background: #a7a7a733;
+    border-bottom: 2px solid #333;
+    transform-origin: top center;
+    /* transform: rotateX(0deg); ← QUITA O COMENTA ESTA LÍNEA */
+    /* transition: transform 1.5s... ← QUITA O COMENTA ESTA LÍNEA */
+    z-index: 60;
+    backdrop-filter: blur(5px);
+}
+
+/* Comenta o quita esto también */
+/*
+.portfolio-briefcase.open .briefcase-lid {
+    transform: rotateX(-105deg);
+}
+*/
+
+        /* Agarradera - HACIA AFUERA */
+        .briefcase-handle {
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 180px;
+            height: 50px;
+            border: 6px solid #fff;
+            border-bottom: none;
+            border-radius: 30px 30px 0 0;
+            background: rgba(0, 0, 0, 0.8);
+            box-shadow: 0 -5px 20px rgba(255, 255, 255, 0.3);
+            z-index: 60;
+        }
+
+        /* Broches de seguridad */
+        .briefcase-latches {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 100px;
+        }
+
+        .latch {
+            width: 50px;
+            height: 25px;
+            background: linear-gradient(to bottom, #ccc 0%, #999 100%);
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+            position: relative;
+        }
+
+        .latch::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 12px;
+            height: 12px;
+            background: #333;
+            border-radius: 50%;
+        }
+
+        /* Interior del maletín */
+        .briefcase-interior {
+            position: relative;
+            min-height: 500px;
+            background: rgba(10, 10, 10, 0.4);
+            padding: 3rem;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Bolsillos organizadores */
+        .organizer-pockets {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            right: 2rem;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1rem;
+            opacity: 0;
+            transition: opacity 0.5s ease 0.5s;
+        }
+
+        .portfolio-briefcase.open .organizer-pockets {
+            opacity: 0.3;
+        }
+
+        .pocket {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            height: 80px;
+        }
+
+        .pocket-small {
+            height: 60px;
+        }
+
+        /* ============================================
+           REVISTAS APILADAS
+           ============================================ */
+        .magazines-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .magazine {
+            position: absolute;
+            width: 220px;
+            height: 300px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8);
+            cursor: pointer;
+            transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            transform-style: preserve-3d;
+            opacity: 0;
+            transform: translateY(50px) rotateY(0deg);
+        }
+
+        .magazine.visible {
+            opacity: 1;
+            transform: translateY(0) rotateY(0deg);
+        }
+
+        .magazine:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
+            z-index: 100 !important;
+                border-color: #ffffff; /* Se vuelve blanco brillante al hacer hover */
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5); /* Efecto de brillo */
+        }
+
+        /* Posiciones más superpuestas */
+        .magazine:nth-child(1) {
+            left: calc(50% - 280px);
+            z-index: 1;
+        }
+
+        .magazine:nth-child(2) {
+            left: calc(50% - 110px);
+            z-index: 2;
+        }
+
+        .magazine:nth-child(3) {
+            left: calc(50% + 60px);
+            z-index: 3;
+        }
+
+        .magazine:nth-child(4) {
+            left: calc(50% - 195px);
+            z-index: 4;
+            top: 20px;
+        }
+
+        .magazine:nth-child(5) {
+            left: calc(50% + 10px);
+            z-index: 5;
+            top: 20px;
+        }
+
+        /* Portada de revista */
+        .magazine-cover {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: top center;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 2rem;
+        }
+
+        .magazine-cover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, transparent 40%, rgba(0, 0, 0, 0.95) 100%);
+        }
+
+        .magazine-header {
+            position: relative;
+            z-index: 1;
+            margin-bottom: auto;
+            padding-top: 2rem;
+        }
+
+        .magazine-brand {
+            font-size: 0.75rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 0.5rem;
+        }
+
+        .magazine-title {
+            position: relative;
+            z-index: 1;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #fff;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.9);
+            line-height: 1.2;
+        }
+
+        .magazine-number {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.6);
+            z-index: 1;
+        }
+
+/* Imágenes de portadas */
+.magazine[data-service="filigrana"] .magazine-cover {
+    background: 
+        linear-gradient(to bottom, transparent 40%, rgba(0, 0, 0, 0.95) 100%),
+        url('assets/images/filigrana.png');
+    background-size: cover;
+    background-position: top center;
+}
+
+.magazine[data-service="legal"] .magazine-cover {
+    background: 
+        linear-gradient(to bottom, transparent 40%, rgba(0, 0, 0, 0.95) 100%),
+        url('assets/images/legal.png');
+    background-size: cover;
+    background-position: top center ;
+}
+
+.magazine[data-service="ia-legal"] .magazine-cover {
+    background: 
+        linear-gradient(to bottom, transparent 40%, rgba(0, 0, 0, 0.95) 100%),
+        url('assets/images/ia-legal.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.magazine[data-service="quien-soy"] .magazine-cover {
+    background: 
+        linear-gradient(to bottom, transparent 40%, rgba(0, 0, 0, 0.95) 100%),
+        url('assets/imagen/quien-soy.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.magazine[data-service="portafolio"] .magazine-cover {
+    background: 
+        linear-gradient(to bottom, transparent 40%, rgba(0, 0, 0, 0.95) 100%),
+        url('assets/imagen/portafolio.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+        /* ============================================
+           MODAL DE DETALLES
+           ============================================ */
+        .service-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            padding: 2rem;
+        }
+
+        .service-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            max-width: 900px;
+            width: 100%;
+            background: linear-gradient(135deg, #111 0%, #1a1a1a 100%);
+            border: 2px solid #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            transform: scale(0.9) translateY(50px);
+            transition: transform 0.5s ease;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9);
+        }
+
+        .service-modal.active .modal-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-header {
+            height: 350px;
+            background-size: cover;
+            background-position: top center;
+            position: relative;
+        }
+
+        .modal-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 150px;
+            background: linear-gradient(to top, #111 0%, transparent 100%);
+        }
+
+        .modal-body {
+            padding: 3rem;
+            position: relative;
+            margin-top: -100px;
+        }
+
+        .modal-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 300;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            color: #fff;
+        }
+
+        .modal-description {
+            font-size: 1.1rem;
+            color: #aaa;
+            line-height: 1.9;
+            margin-bottom: 2.5rem;
+        }
+
+        .modal-button {
+            display: inline-block;
+            padding: 1.25rem 3.5rem;
+            background: #fff;
+            color: #000;
+            text-decoration: none;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            border: 2px solid #fff;
+            font-size: 0.875rem;
+        }
+
+        .modal-button:hover {
+            background: transparent;
+            color: #fff;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #fff;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .modal-close:hover {
+            background: #fff;
+            color: #000;
+            transform: rotate(90deg);
+        }
+
+        /* ============================================
+           VERSIÓN MÓVIL
+           ============================================ */
         @media (max-width: 768px) {
-            .content {
+            .services-section {
+                padding: 10rem 1.5rem 3rem;
+            }
+
+            .briefcase-handle {
+                width: 140px;
+                height: 40px;
+                border-width: 5px;
+                top: -45px;
+            }
+
+            .briefcase-lid {
+                height: 150px;
+            }
+
+            .briefcase-interior {
+                min-height: 900px;
+                padding: 1rem 1rem;
+            }
+
+            .organizer-pockets {
+                display: none;
+            }
+
+            .magazines-container {
+                height: 990px;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .magazine {
+                position: relative !important;
+                left: auto !important;
+                top: auto !important;
+                width: 100%;
+                max-width: 600px;
+                height: 200px;
+                opacity: 0;
+                transform: translateY(50px);
+                border: 1px solid rgba(255, 255, 255, 0.4); /* Borde blanco fino */
+                margin-top: -50px; /* ← CAMBIA ESTO. Número más negativo = más solapamiento hacia arriba */
+            }
+
+            .magazine.visible {
+                transform: translateY(0);
+            }
+
+            .magazine-title {
+                font-size: 1.25rem;
+            }
+
+            .modal-header {
+                height: 250px;
+            }
+
+            .modal-body {
                 padding: 2rem 1.5rem;
+                margin-top: -60px;
             }
 
-            .header {
-                padding: 2rem 0 3rem;
+            .modal-title {
+                font-size: 1.75rem;
             }
 
-            .services-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
+            .modal-description {
+                font-size: 1rem;
             }
+        }
 
-            .service-card {
-                padding: 2rem 1.5rem;
-            }
-
-            .cta-button {
-                display: block;
-                margin: 1rem 0;
-            }
-
-            .cta-button.outline {
-                margin-left: 0;
-            }
-
-            .back-link {
-                top: 1rem;
-                left: 1rem;
-            }
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: #444;
+            font-size: 0.875rem;
+            letter-spacing: 0.1em;
+            position: relative;
+            z-index: 10;
         }
     </style>
 </head>
 <body>
 
-    <!-- Canvas de partículas -->
-    <canvas id="particle-canvas"></canvas>
+    <!-- Fondo de partículas -->
+    <div id="particles-container"></div>
 
-    <!-- Botón volver -->
-    <a href="index.html" class="back-link">← Volver</a>
+    <!-- Header -->
+    <header class="header">
+        <h1>Servicios</h1>
+        <p class="subtitle">Pregunte por lo que no vea</p>
+    </header>
 
-    <!-- Contenido -->
-    <div class="content">
+    <!-- Back Button -->
+    <a href="index.html" class="back-link">← Atrás</a>
+
+    <!-- Contenido Principal -->
+    <div id="main-content">
         
-        <header class="header">
-            <h1>Servicios</h1>
-            <div class="divider"></div>
-            <p class="subtitle">Soluciones personalizadas para ti</p>
-        </header>
-
-        <div class="services-grid">
+        <section class="services-section">
             
-            <article class="service-card">
-                <div class="service-number">01</div>
-                <h2>Diseño Web</h2>
-                <p>Interfaces modernas y responsivas que capturan la esencia de tu marca y convierten visitantes en clientes.</p>
-                <ul class="service-features">
-                    <li>Diseño UI/UX personalizado</li>
-                    <li>Desarrollo responsive</li>
-                    <li>Optimización de velocidad</li>
-                    <li>SEO técnico</li>
-                </ul>
-            </article>
+            <div class="portfolio-briefcase" id="portfolioBriefcase">
+                
+                <div class="briefcase-container">
+                    
+                    <!-- Tapa superior -->
+                <div class="briefcase-handle"></div>
+                    <div class="briefcase-lid">
+                        <div class="briefcase-latches">
+                            <div class="latch"></div>
+                            <div class="latch"></div>
+                        </div>
+                    </div>
 
-            <article class="service-card">
-                <div class="service-number">02</div>
-                <h2>Joyas de Filigrana</h2>
-                <p>Convierte ideas en piezas únicas de joyería que combinan arte y técnica.</p>
-                <ul class="service-features">
-                    <li>Diseño de joyas</li>
-                    <li>Procesos de fabricación</li>
-                    <li>Calidad y acabados</li>
-                    <li>Personalización</li>
-                </ul>
-            </article>
+                    <!-- Interior -->
+                    <div class="briefcase-interior">
+                        
+                        <!-- Bolsillos organizadores -->
+                        <div class="organizer-pockets">
+                            <div class="pocket"></div>
+                            <div class="pocket pocket-small"></div>
+                            <div class="pocket pocket-small"></div>
+                            <div class="pocket"></div>
+                        </div>
 
-            <article class="service-card">
-                <div class="service-number">03</div>
-                <h2>Asesoría Legal</h2>
-                <p>Asesoramiento jurídico especializado para proteger tus intereses y cumplir con las regulaciones.</p>
-                <ul class="service-features">
-                    <li>Consultoría legal</li>
-                    <li>Redacción de contratos</li>
-                    <li>Asistencia en litigios</li>
-                    <li>Conformidad regulatoria</li>
-                </ul>
-            </article>
+                        <!-- Contenedor de revistas -->
+                        <div class="magazines-container">
+                            
+                            <!-- Revista 1 -->
+                            <div class="magazine" data-service="filigrana">
+                                <div class="magazine-cover">
+                                    <div class="magazine-number">01</div>
+                                    <div class="magazine-header">
+                                        <div class="magazine-brand"></div>
+                                    </div>
+                                    <div class="magazine-title">Joyas de Filigrana</div>
+                                </div>
+                            </div>
 
-            <article class="service-card">
-                <div class="service-number">04</div>
-                <h2>IA para Abogados Open Source</h2>
-                <p>Soluciones de inteligencia artificial diseñadas específicamente para el ámbito legal, facilitando la investigación y el análisis de casos.</p>
-                <ul class="service-features">
-                    <li>Sistema de búsqueda legal RAG</li>
-                    <li>Modelos de Embedding</li>
-                    <li>IA Generativa de textos jurídicos</li>
-                    <li>Redacción de argumentos jurídicos</li>
-                </ul>
-            </article>
+                            <!-- Revista 2 -->
+                            <div class="magazine" data-service="legal">
+                                <div class="magazine-cover">
+                                    <div class="magazine-number">02</div>
+                                    <div class="magazine-header">
+                                        <div class="magazine-brand"></div>
+                                    </div>
+                                    <div class="magazine-title">Consultoría Legal</div>
+                                </div>
+                            </div>
 
-            <article class="service-card">
-                <div class="service-number">05</div>
-                <h2>Optimización de Espacios de Trabajo</h2>
-                <p>Mejora la eficiencia y productividad de tu equipo mediante la optimización de los espacios de trabajo y los procesos.</p>
-                <ul class="service-features">
-                    <li>Organización del espacio de trabajo</li>
-                    <li>Diseño de flujos de trabajo</li>
-                    <li>Implementación de procesos eficientes</li>
-                    <li>Adquisición de herramientas de productividad</li>
-                </ul>
-            </article>
+                            <!-- Revista 3 -->
+                            <div class="magazine" data-service="ia-legal">
+                                <div class="magazine-cover">
+                                    <div class="magazine-number">03</div>
+                                    <div class="magazine-header">
+                                        <div class="magazine-brand"></div>
+                                    </div>
+                                    <div class="magazine-title">IA Legal Open Source</div>
+                                </div>
+                            </div>
 
-            <article class="service-card">
-                <div class="service-number">06</div>
-                <h2>Mantenimiento</h2>
-                <p>Soporte continuo para mantener tus joyas en perfecto estado</p>
-                <ul class="service-features">
-                    <li>Limpieza y mantenimiento</li>
-                    <li>Reparación de daños</li>
-                    <li>Restauración de valor</li>
-                    <li>Cámbio de Platado a Dorado</li>
-                </ul>
-            </article>
+                            <!-- Revista 4 -->
+                            <div class="magazine" data-service="quien-soy">
+                                <div class="magazine-cover">
+                                    <div class="magazine-number">04</div>
+                                    <div class="magazine-header">
+                                        <div class="magazine-brand"></div>
+                                    </div>
+                                    <div class="magazine-title">Quién Soy</div>
+                                </div>
+                            </div>
 
-        </div>
+                            <!-- Revista 5 -->
+                            <div class="magazine" data-service="portafolio">
+                                <div class="magazine-cover">
+                                    <div class="magazine-number">05</div>
+                                    <div class="magazine-header">
+                                        <div class="magazine-brand"></div>
+                                    </div>
+                                    <div class="magazine-title">Portafolio</div>
+                                </div>
+                            </div>
 
-        <section class="cta-section">
-            <h2>¿Listo para comenzar?</h2>
-            <p>Hablemos sobre tu próximo proyecto</p>
-            <a href="#" class="cta-button">Contactar</a>
-            <a href="#" class="cta-button outline">Ver portafolio</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </section>
 
+        <!-- Footer -->
         <footer class="footer">
             <p>© 2026 Krykols · Todos los derechos reservados</p>
         </footer>
 
     </div>
 
+    <!-- Modal de Detalles -->
+    <div class="service-modal" id="serviceModal">
+        <button class="modal-close" onclick="closeModal()">×</button>
+        <div class="modal-content">
+            <div class="modal-header" id="modalHeader"></div>
+            <div class="modal-body">
+                <h2 class="modal-title" id="modalTitle"></h2>
+                <p class="modal-description" id="modalDescription"></p>
+                <a href="#" class="modal-button" id="modalButton">Explorar servicio</a>
+            </div>
+        </div>
+    </div>
+
     <script>
         // ============================================
-        // SISTEMA DE PARTÍCULAS ORBITALES
+        // DATOS DE SERVICIOS
         // ============================================
-        
-        const canvas = document.getElementById('particle-canvas');
-        const ctx = canvas.getContext('2d');
-        
-        let width, height;
-        let particles = [];
-        let attractors = [];
-        let mouse = { x: null, y: null, active: false };
-        
-        // Configuración
-        const config = {
-            particleCount: 100,
-            trailAlpha: 0.08,       // Menor = rastro más largo
-            baseSpeed: 0.5,
-            randomForce: 0.15,      // Fuerza del movimiento aleatorio
-            attractorForce: 0.08,   // Fuerza de atracción
-            orbitForce: 0.12,       // Fuerza de órbita
-            mouseForce: 0.5,
-            mouseRadius: 400,
-            particleSize: 1.5,
-            attractorCount: 4,
-            connectionDistance: 120,
-            connectionAlpha: 0.15
+const servicesData = {
+    'filigrana': {
+        title: 'Joyas de Filigrana',
+        brand: 'Krykols',
+        gradient: 'linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%)',
+        image: 'assets/images/filigrana.png',  // ← AGREGA ESTO
+        description: 'Arte tradicional en oro y plata que trasciende generaciones...',
+        button: 'Ver colección completa',
+        link: '/servicios/filigrana'
+    },
+    'legal': {
+        title: 'Consultoría Legal',
+        brand: 'Krykols',
+        gradient: 'linear-gradient(135deg, #4169E1 0%, #1E3A8A 50%, #1E40AF 100%)',
+        image: 'assets/images/legal.png',  // ← AGREGA ESTO
+        description: 'Asesoramiento jurídico integral...',
+        button: 'Agendar consulta',
+        link: '/servicios/consultoria-legal'
+    },
+    'ia-legal': {
+        title: 'IA Legal Open Source',
+        brand: 'Krykols',
+        gradient: 'linear-gradient(135deg, #10B981 0%, #059669 50%, #047857 100%)',
+        image: 'assets/images/ia-legal.png',  // ← AGREGA ESTO
+        description: 'Revoluciona tu práctica legal...',
+        button: 'Explorar herramientas',
+        link: '/servicios/ia-legal'
+    },
+    'quien-soy': {
+        title: 'Quién Soy',
+        brand: 'Krykols',
+        gradient: 'linear-gradient(135deg, #EC4899 0%, #BE185D 50%, #9D174D 100%)',
+        image: 'assets/images/quien-soy.png',  // ← AGREGA ESTO
+        description: 'Soy un profesional apasionado...',
+        button: 'Conocer más',
+        link: '/quien-soy'
+    },
+    'portafolio': {
+        title: 'Portafolio',
+        brand: 'Krykols',
+        gradient: 'linear-gradient(135deg, #8B5CF6 0%, #7C3AED 50%, #6D28D9 100%)',
+        image: 'assets/images/portafolio.png',  // ← AGREGA ESTO
+        description: 'Explora mi trabajo...',
+        button: 'Ver proyectos',
+        link: '/portafolio'
+    }
+};
+        // ============================================
+        // VARIABLES GLOBALES
+        // ============================================
+        const portfolioBriefcase = document.getElementById('portfolioBriefcase');
+        const serviceModal = document.getElementById('serviceModal');
+        let hasOpened = false;
+        const magazines = document.querySelectorAll('.magazine');
+
+        // ============================================
+        // SISTEMA DE PARTÍCULAS
+        // ============================================
+        function createParticles() {
+            const container = document.getElementById('particles-container');
+            const particleCount = 80;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                particle.style.animationDelay = Math.random() * 5 + 's';
+                particle.style.opacity = Math.random() * 0.6 + 0.4;
+                container.appendChild(particle);
+            }
+        }
+
+        // ============================================
+        // APERTURA DEL MALETÍN
+        // ============================================
+        function openBriefcase() {
+            if (hasOpened) return;
+            hasOpened = true;
+
+            portfolioBriefcase.classList.add('open');
+
+            // Mostrar revistas secuencialmente cada 1 segundo
+            showMagazinesSequentially();
+        }
+
+        // Mostrar revistas una por una cada 1 segundo
+        function showMagazinesSequentially() {
+            magazines.forEach((magazine, index) => {
+                setTimeout(() => {
+                    magazine.classList.add('visible');
+                }, index * 1000);
+            });
+        }
+
+        // ============================================
+        // SCROLL Y TOUCH EVENTS
+        // ============================================
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 150 && !hasOpened) {
+                openBriefcase();
+            }
+        });
+
+        let touchStartY = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartY = e.touches[0].clientY;
+        });
+
+        document.addEventListener('touchmove', (e) => {
+            const touchY = e.touches[0].clientY;
+            const touchDiff = touchY - touchStartY;
+
+            if (touchDiff < -50 && !hasOpened) {
+                openBriefcase();
+            }
+        });
+
+        // ============================================
+        // CLICK EN REVISTAS
+        // ============================================
+        magazines.forEach(magazine => {
+            magazine.addEventListener('click', function() {
+                const serviceName = this.dataset.service;
+                openModal(serviceName);
+            });
+        });
+function openModal(serviceName) {
+    const service = servicesData[serviceName];
+    if (!service) return;
+
+    // Usar imagen si existe, si no usar gradiente como respaldo
+    const modalHeader = document.getElementById('modalHeader');
+    
+    if (service.image) {
+        modalHeader.style.background = `
+            linear-gradient(to bottom, transparent 30%, rgba(17, 17, 17, 1) 100%),
+            url('${service.image}')
+        `;
+        modalHeader.style.backgroundSize = 'cover';
+        modalHeader.style.backgroundPosition = 'top center';
+    } else {
+        modalHeader.style.background = service.gradient;
+    }
+    
+    document.getElementById('modalTitle').textContent = service.title;
+    document.getElementById('modalDescription').textContent = service.description;
+    document.getElementById('modalButton').textContent = service.button;
+    document.getElementById('modalButton').href = service.link;
+
+    serviceModal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+        function closeModal() {
+            serviceModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Cerrar al hacer click fuera
+        serviceModal.addEventListener('click', function(e) {
+            if (e.target === serviceModal) {
+                closeModal();
+            }
+        });
+
+        // Cerrar con tecla ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && serviceModal.classList.contains('active')) {
+                closeModal();
+            }
+        });
+
+// ============================================
+// INICIALIZAR
+// ============================================
+createParticles();
+
+// Función para mostrar revistas (universal)
+function initializeMagazines() {
+    if (window.innerWidth <= 768) {
+        // MÓVIL: Usar IntersectionObserver
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
         };
 
-        // Redimensionar
-        function resize() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-            initAttractors();
-        }
-
-        // Crear atractores (puntos de órbita)
-        function initAttractors() {
-            attractors = [];
-            const positions = [
-                { x: width * 0.25, y: height * 0.3 },
-                { x: width * 0.75, y: height * 0.25 },
-                { x: width * 0.3, y: height * 0.75 },
-                { x: width * 0.7, y: height * 0.7 },
-                { x: width * 0.5, y: height * 0.5 }
-            ];
-            
-            for (let i = 0; i < config.attractorCount; i++) {
-                const pos = positions[i % positions.length];
-                attractors.push({
-                    x: pos.x + (Math.random() - 0.5) * 100,
-                    y: pos.y + (Math.random() - 0.5) * 100,
-                    radius: 80 + Math.random() * 60,
-                    strength: 0.5 + Math.random() * 0.5,
-                    phase: Math.random() * Math.PI * 2,
-                    speed: 0.005 + Math.random() * 0.01
-                });
-            }
-        }
-
-        // Clase Partícula
-        class Particle {
-            constructor() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.vx = (Math.random() - 0.5) * config.baseSpeed;
-                this.vy = (Math.random() - 0.5) * config.baseSpeed;
-                this.size = Math.random() * config.particleSize + 0.5;
-                this.alpha = Math.random() * 0.5 + 0.3;
-                this.life = 0;
-                this.attractorIndex = Math.floor(Math.random() * attractors.length);
-                this.orbitAngle = Math.random() * Math.PI * 2;
-                this.orbitRadius = 50 + Math.random() * 100;
-                this.wanderAngle = Math.random() * Math.PI * 2;
-            }
-
-            update() {
-                this.life++;
-
-                // 1. Movimiento aleatorio (wander)
-                this.wanderAngle += (Math.random() - 0.5) * 0.5;
-                const wanderX = Math.cos(this.wanderAngle) * config.randomForce;
-                const wanderY = Math.sin(this.wanderAngle) * config.randomForce;
-                this.vx += wanderX;
-                this.vy += wanderY;
-
-                // 2. Fuerza de atracción hacia un atractor
-                const attractor = attractors[this.attractorIndex];
-                const dx = attractor.x - this.x;
-                const dy = attractor.y - this.y;
-                const dist = Math.sqrt(dx * dx + dy * dy);
-                
-                if (dist < attractor.radius * 3) {
-                    // Fuerza de atracción
-                    const force = config.attractorForce * attractor.strength;
-                    this.vx += (dx / dist) * force;
-                    this.vy += (dy / dist) * force;
-
-                    // Fuerza de órbita (perpendicular)
-                    const orbitAngle = Math.atan2(dy, dx) + Math.PI / 2;
-                    const orbitStrength = config.orbitForce * attractor.strength;
-                    this.vx += Math.cos(orbitAngle) * orbitStrength;
-                    this.vy += Math.sin(orbitAngle) * orbitStrength;
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
                 }
-
-                // 3. Interacción con el mouse
-                if (mouse.active) {
-                    const mdx = mouse.x - this.x;
-                    const mdy = mouse.y - this.y;
-                    const mDist = Math.sqrt(mdx * mdx + mdy * mdy);
-                    
-                    if (mDist < config.mouseRadius) {
-                        const force = (1 - mDist / config.mouseRadius) * config.mouseForce;
-                        this.vx += (mdx / mDist) * force;
-                        this.vy += (mdy / mDist) * force;
-                    }
-                }
-
-                // 4. Fricción (limitar velocidad)
-                const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
-                const maxSpeed = 3;
-                if (speed > maxSpeed) {
-                    this.vx = (this.vx / speed) * maxSpeed;
-                    this.vy = (this.vy / speed) * maxSpeed;
-                }
-                
-                this.vx *= 0.98;
-                this.vy *= 0.98;
-
-                // 5. Actualizar posición
-                this.x += this.vx;
-                this.y += this.vy;
-
-                // 6. Cambiar atractor ocasionalmente
-                if (Math.random() < 0.002) {
-                    this.attractorIndex = Math.floor(Math.random() * attractors.length);
-                }
-
-                // 7. Wrap around (aparecer del otro lado)
-                const margin = 50;
-                if (this.x < -margin) this.x = width + margin;
-                if (this.x > width + margin) this.x = -margin;
-                if (this.y < -margin) this.y = height + margin;
-                if (this.y > height + margin) this.y = -margin;
-            }
-
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
-                ctx.fill();
-            }
-        }
-
-        // Inicializar partículas
-        function initParticles() {
-            particles = [];
-            for (let i = 0; i < config.particleCount; i++) {
-                particles.push(new Particle());
-            }
-        }
-
-        // Dibujar conexiones entre partículas cercanas
-        function drawConnections() {
-            for (let i = 0; i < particles.length; i++) {
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-
-                    if (dist < config.connectionDistance) {
-                        const alpha = (1 - dist / config.connectionDistance) * config.connectionAlpha;
-                        ctx.beginPath();
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.stroke();
-                    }
-                }
-            }
-        }
-
-        // Dibujar atractores (sutil)
-        function drawAttractors() {
-            attractors.forEach(attractor => {
-                attractor.phase += attractor.speed;
-                const pulseRadius = attractor.radius + Math.sin(attractor.phase) * 10;
-                
-                ctx.beginPath();
-                ctx.arc(attractor.x, attractor.y, pulseRadius, 0, Math.PI * 2);
-                ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
-                ctx.lineWidth = 1;
-                ctx.stroke();
-
-                // Centro del atractor
-                ctx.beginPath();
-                ctx.arc(attractor.x, attractor.y, 2, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
-                ctx.fill();
             });
-        }
+        }, observerOptions);
 
-        // Loop de animación
-        function animate() {
-            // Trail effect: fondo semi-transparente en lugar de limpiar
-            ctx.fillStyle = `rgba(0, 0, 0, ${config.trailAlpha})`;
-            ctx.fillRect(0, 0, width, height);
-
-            drawAttractors();
-            drawConnections();
-
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-
-            requestAnimationFrame(animate);
-        }
-
-        // Eventos
-        window.addEventListener('resize', resize);
-
-        canvas.addEventListener('mousemove', (e) => {
-            mouse.x = e.clientX;
-            mouse.y = e.clientY;
-            mouse.active = true;
+        magazines.forEach(magazine => {
+            observer.observe(magazine);
         });
+    } else {
+        // PC: Mostrar secuencialmente
+        setTimeout(() => {
+            showMagazinesSequentially();
+        }, 1000);
+    }
+}
 
-        canvas.addEventListener('mouseleave', () => {
-            mouse.active = false;
-        });
-
-        canvas.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-            mouse.x = e.touches[0].clientX;
-            mouse.y = e.touches[0].clientY;
-            mouse.active = true;
-        }, { passive: false });
-
-        canvas.addEventListener('touchend', () => {
-            mouse.active = false;
-        });
-
-        // Event listeners globales (para que funcione en toda la pantalla)
-window.addEventListener('mousemove', (e) => {
-    mouse.x = e.clientX;
-    mouse.y = e.clientY;
-    mouse.active = true;
+// Iniciar después de que cargue la página
+window.addEventListener('load', () => {
+    initializeMagazines();
 });
 
-window.addEventListener('mouseleave', () => {
-    mouse.active = false;
-});
-
-window.addEventListener('touchmove', (e) => {
-    mouse.x = e.touches[0].clientX;
-    mouse.y = e.touches[0].clientY;
-    mouse.active = true;
-}, { passive: false });
-
-window.addEventListener('touchend', () => {
-    mouse.active = false;
-});
-
-        // Inicializar
-        resize();
-        initParticles();
-        animate();
+// También intentar después de un tiempo por si acaso
+setTimeout(() => {
+    if (!hasOpened && window.innerWidth > 768) {
+        showMagazinesSequentially();
+    }
+}, 1500);
     </script>
 </body>
 </html>
