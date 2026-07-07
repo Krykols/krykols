@@ -33,32 +33,55 @@
             overflow: hidden;
         }
 
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 50%;
-            animation: rise linear infinite;
-            box-shadow: 
-                0 0 10px rgba(255, 255, 255, 0.8),
-                0 0 20px rgba(255, 255, 255, 0.6),
-                0 0 30px rgba(255, 255, 255, 0.4);
-        }
+.particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    animation: rise linear infinite;
+    box-shadow: 
+        0 0 10px rgba(255, 255, 255, 0.8),
+        0 0 20px rgba(255, 255, 255, 0.5),
+        0 0 30px rgba(255, 255, 255, 0.3);
+}
 
-        /* Estela de la partícula */
-        .particle::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 50%;
-            filter: blur(12px);
-            animation: trail 1s ease-out infinite;
-        }
+/* Rastro principal */
+.particle::before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 60px;
+    background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.7) 0%,
+        rgba(255, 255, 255, 0.4) 40%,
+        transparent 100%
+    );
+    border-radius: 2px;
+    filter: blur(2px);
+}
+
+/* Rastro secundario (más difuso) */
+.particle::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 80px;
+    background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.3) 0%,
+        transparent 100%
+    );
+    border-radius: 4px;
+    filter: blur(1px);
+}
 
         @keyframes rise {
             0% {
@@ -153,6 +176,72 @@
             padding: 12rem 2rem 4rem;
             position: relative;
         }
+
+        /* ============================================
+   PORTAFOLIOS DECORATIVOS DE FONDO (SOLO PC)
+   ============================================ */
+.background-briefcases {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;  /* No interfieren con clicks */
+    z-index: 0;
+}
+
+.bg-briefcase {
+    position: absolute;
+    width: 700px;
+    opacity: 0.5;  /* Más transparentes para no distraer */
+    transform: translateY(200px);  /* Más arriba que el principal */
+}
+
+.bg-briefcase-left {
+    left: -100px;
+    top: 50px;
+}
+
+.bg-briefcase-right {
+    right: -100px;
+    top: 50px;
+}
+
+.bg-briefcase .briefcase-container {
+    background: rgba(0, 0, 0, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.bg-briefcase .briefcase-lid {
+    height: 270px;
+    background: rgba(26, 26, 26, 0.3);
+}
+
+.bg-briefcase .briefcase-handle {
+    width: 140px;
+    height: 40px;
+    border: 4px solid rgba(255, 255, 255, 0.5);
+    top: -40px;
+}
+
+.bg-briefcase .briefcase-interior {
+    min-height: 300px;
+    background: rgba(10, 10, 10, 0.3);
+}
+
+.bg-briefcase .latch {
+    width: 40px;
+    height: 20px;
+    background: linear-gradient(to bottom, #999 0%, #666 100%);
+}
+
+/* Ocultar en móvil */
+@media (max-width: 768px) {
+    .background-briefcases {
+        display: none;
+    }
+}
 
         /* ============================================
            MALETÍN PORTFOLIO
@@ -420,7 +509,7 @@
 
 .magazine[data-service="legal"] .magazine-cover {
     background: 
-        linear-gradient(to bottom, transparent 40%, rgba(23, 0, 78, 0.95) 100%),
+        linear-gradient(to bottom, transparent 40%, rgba(8, 0, 78, 0.95) 100%),
         url('assets/images/legal.png');
     background-size: cover;
     background-position: top center ;
@@ -444,7 +533,7 @@
 
 .magazine[data-service="redes"] .magazine-cover {
     background: 
-        linear-gradient(to bottom, transparent 40%, rgba(61, 0, 80, 0.95) 100%),
+        linear-gradient(to bottom, transparent 40%, rgba(61, 0, 80, 0.99) 100%),
         url('assets/images/redes.jpg');
     background-size: cover;
     background-position: center;
@@ -452,23 +541,23 @@
 
 /* Bordes independientes para cada revista */
 .magazine[data-service="filigrana"] {
-    border: 2px solid #d3d3d39a;  /* Dorado */
+    border: 2px solid #949494;  /* Dorado */
 }
 
 .magazine[data-service="legal"] {
-    border: 2px solid #134eff79;  /* Azul */
+    border: 2px solid #284bb4;  /* Azul */
 }
 
 .magazine[data-service="ia-legal"] {
-    border: 2px solid #00d9ff77;  /* Verde */
+    border: 2px solid #2ba0b4;  /* Verde */
 }
 
 .magazine[data-service="quien-soy"] {
-    border: 2px solid #440000ab;  /* Rosa */
+    border: 2px solid #a72727;  /* Rosa */
 }
 
 .magazine[data-service="redes"] {
-    border: 2px solid #ae58ff91;  /* Púrpura */
+    border: 2px solid #6a2ea3;  /* Púrpura */
 }
 
         /* ============================================
@@ -702,6 +791,37 @@
         
         <section class="services-section">
             
+                <!-- Portafolios decorativos de fondo (solo PC) -->
+    <div class="background-briefcases">
+        <!-- Portafolio izquierdo -->
+        <div class="bg-briefcase bg-briefcase-left">
+            <div class="briefcase-container">
+                <div class="briefcase-lid">
+                    <div class="briefcase-handle"></div>
+                    <div class="briefcase-latches">
+                        <div class="latch"></div>
+                        <div class="latch"></div>
+                    </div>
+                </div>
+                <div class="briefcase-interior"></div>
+            </div>
+        </div>
+
+        <!-- Portafolio derecho -->
+        <div class="bg-briefcase bg-briefcase-right">
+            <div class="briefcase-container">
+                <div class="briefcase-lid">
+                    <div class="briefcase-handle"></div>
+                    <div class="briefcase-latches">
+                        <div class="latch"></div>
+                        <div class="latch"></div>
+                    </div>
+                </div>
+                <div class="briefcase-interior"></div>
+            </div>
+        </div>
+    </div>
+
             <div class="portfolio-briefcase" id="portfolioBriefcase">
                 
                 <div class="briefcase-container">
@@ -875,15 +995,15 @@ const servicesData = {
         // ============================================
         function createParticles() {
             const container = document.getElementById('particles-container');
-            const particleCount = 80;
+            const particleCount = 40;
 
             for (let i = 0; i < particleCount; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'particle';
                 particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
-                particle.style.animationDelay = Math.random() * 5 + 's';
-                particle.style.opacity = Math.random() * 0.6 + 0.4;
+                particle.style.animationDuration = (Math.random() * 2 + 0.5) + 's';
+                particle.style.animationDelay = Math.random() * 4 + 's';
+                particle.style.opacity = Math.random() * 0.9 + 0.2;
                 container.appendChild(particle);
             }
         }
