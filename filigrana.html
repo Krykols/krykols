@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Joyas de Filigrana | Krykols</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            background: #000;
+            font-family: 'Segoe UI', -apple-system, sans-serif;
+            color: #fff;
+        }
+
+        /* ============================================
+           POPUPS ESTILO RPG
+           ============================================ */
+        .rpg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.8s ease;
+        }
+
+        .rpg-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .rpg-popup {
+            position: relative;
+            width: 90%;
+            max-width: 600px;
+            min-height: 400px;
+            background-image: url('assets/images/advertencia.png');
+            background-size: cover;
+            background-position: center;
+            border: 3px solid rgba(0, 0, 0, 0.692);
+            border-radius: 12px;
+            padding: 3rem 2.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transform: scale(0.85);
+            transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+            box-shadow: 
+                0 0 60px rgba(255, 255, 255, 0.1),
+                inset 0 0 60px rgb(0, 0, 0);
+        }
+
+        .rpg-overlay.active .rpg-popup {
+            transform: scale(1);
+        }
+
+        /* Capa oscura sobre la imagen para legibilidad */
+        .rpg-popup::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            z-index: 1;
+        }
+
+        .rpg-content {
+            position: relative;
+            z-index: 2;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .rpg-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            color: #fafafa7c;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+            text-align: center;  /* ← AGREGA ESTA LÍNEA */
+        }
+
+        .rpg-text {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #fff;
+            text-shadow: 0 1px 5px rgba(0, 0, 0, 0.9);
+            text-align: justify;  /* ← AGREGA ESTA LÍNEA */
+        }
+
+        .rpg-button-container {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .rpg-button {
+            padding: 1rem 3rem;
+            background: rgba(65, 65, 65, 0.9);
+            color: #000;
+            border: 2px solid #4d4d4d;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(143, 143, 143, 0.3);
+        }
+
+        .rpg-button:hover {
+            background: #fff;
+            border-color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.4);
+        }
+
+        /* Indicador de página (estilo RPG) */
+        .rpg-page-indicator {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 0.1em;
+            z-index: 3;
+        }
+
+        /* ============================================
+           CONTENIDO DE LA PÁGINA
+           ============================================ */
+        .page-content {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            padding: 6rem 2rem 4rem;
+            opacity: 0;
+            transition: opacity 1s ease 0.5s;
+        }
+
+        .page-content.visible {
+            opacity: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .header h1 {
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 300;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header .subtitle {
+            font-size: 1rem;
+            color: #888;
+            letter-spacing: 0.2em;
+        }
+
+        .back-link {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            z-index: 100;
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.875rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+        }
+
+        .back-link:hover {
+            opacity: 1;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: #444;
+            font-size: 0.875rem;
+            letter-spacing: 0.1em;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .rpg-popup {
+                padding: 2rem 1.5rem;
+                min-height: 350px;
+            }
+
+            .rpg-title {
+                font-size: 1.25rem;
+            }
+
+            .rpg-text {
+                font-size: 0.95rem;
+            }
+
+            .rpg-button {
+                padding: 0.875rem 2rem;
+                font-size: 0.875rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Popup 1 -->
+    <div class="rpg-overlay active" id="popup1">
+        <div class="rpg-popup">
+            <div class="rpg-page-indicator">1 / 2</div>
+            <div class="rpg-content">
+                <h2 class="rpg-title">⚠ Advertencia</h2>
+                <p class="rpg-text">
+                    Las joyas de filigrana en plata se ennegrecen porque la plata reacciona de forma natural con los compuestos de azufre presentes en el aire, formando una fina capa de sulfuro de plata (Ag₂S) de color oscuro. En las aleaciones de plata (como la plata 925), el cobre también puede reaccionar, acelerando el proceso de oxidación y oscurecimiento.
+                </p>
+            </div>
+            <div class="rpg-button-container">
+                <button class="rpg-button" onclick="closePopup1()">Continuar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup 2 -->
+    <div class="rpg-overlay" id="popup2">
+        <div class="rpg-popup">
+            <div class="rpg-page-indicator">2 / 2</div>
+            <div class="rpg-content">
+                <h2 class="rpg-title">⚠ Importante</h2>
+                <p class="rpg-text">
+                    El contacto con perfumes, cremas, lociones, desodorantes, bloqueadores solares y productos para el cabello puede acelerar este fenómeno, ya que algunos contienen compuestos de azufre, cloruros, ácidos o alcoholes que favorecen las reacciones químicas sobre la superficie de la joya. Asimismo, el sudor y la grasa natural de la piel contienen sales, ácidos y humedad que, dependiendo de la composición química de cada persona, pueden aumentar la velocidad con la que la plata pierde su brillo y desarrolla la pátina oscura.
+                </p>
+            </div>
+            <div class="rpg-button-container">
+                <button class="rpg-button" onclick="closePopup2()">Continuar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenido de la página -->
+    <a href="services.html" class="back-link">← Volver</a>
+
+    <div class="page-content" id="pageContent">
+        <header class="header">
+            <h1>Joyas de Filigrana</h1>
+            <p class="subtitle">Arte tradicional en plata</p>
+        </header>
+
+        <!-- Aquí va el contenido de tu página -->
+        <div style="text-align: center; color: #666; padding: 4rem 0;">
+            <p>Contenido de la página de filigrana...</p>
+        </div>
+
+        <footer class="footer">
+            <p>© 2026 Krykols · Todos los derechos reservados</p>
+        </footer>
+    </div>
+
+    <script>
+        // ============================================
+        // CONTROL DE POPUPS
+        // ============================================
+        const popup1 = document.getElementById('popup1');
+        const popup2 = document.getElementById('popup2');
+        const pageContent = document.getElementById('pageContent');
+
+        // Cerrar popup 1 y mostrar popup 2
+        function closePopup1() {
+            // Desvanecer popup 1
+            popup1.classList.remove('active');
+            
+            // Esperar la animación y mostrar popup 2
+            setTimeout(() => {
+                popup2.classList.add('active');
+            }, 800);
+        }
+
+        // Cerrar popup 2 y mostrar la página
+        function closePopup2() {
+            // Desvanecer popup 2
+            popup2.classList.remove('active');
+            
+            // Mostrar contenido de la página
+            setTimeout(() => {
+                pageContent.classList.add('visible');
+            }, 800);
+        }
+
+        // Mostrar popup 1 al cargar la página
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                popup1.classList.add('active');
+            }, 300);
+        });
+    </script>
+</body>
+</html>
