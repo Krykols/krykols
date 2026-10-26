@@ -955,15 +955,11 @@
             const featuresList = document.getElementById('modalFeatures');
             featuresList.innerHTML = service.features.map(feature => `<li>${feature}</li>`).join('');
 
-            // Lógica del GIF (descomenta las 3 líneas de abajo cuando tengas los archivos)
-            if (service.gif) {
-                // modalGif.src = service.gif;
-                // modalGif.style.display = 'block';
-                // placeholderText.style.display = 'none';
-                
-                modalGif.style.display = 'none';
-                placeholderText.style.display = 'flex';
-            }
+if (service.gif) {
+    modalGif.src = service.gif;           // ← Descomentado
+    modalGif.style.display = 'block';     // ← Descomentado
+    placeholderText.style.display = 'none'; // ← Descomentado
+}
 
             serviceModal.classList.add('active');
             document.body.style.overflow = 'hidden';
