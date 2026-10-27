@@ -349,8 +349,8 @@
             pointer-events: none;
             transition: opacity 0.4s ease;
             padding: 1rem;
-            backdrop-filter: blur(5px);
-        }
+            overflow-y: auto; /* Permite scroll general si el modal es muy alto */
+}
 
         .service-modal.active {
             opacity: 1;
@@ -359,8 +359,10 @@
 
         .modal-content {
             max-width: 700px;
-            width: 100%;
+            width: 95%;
+            max-height: 90vh;
             background: rgba(0, 10, 20, 0.95);
+            overflow-y: auto
             border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 2.5rem;
             position: relative;
@@ -368,6 +370,22 @@
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
         }
+            /* Barra de desplazamiento futurista */
+    scrollbar-width: thin;
+    scrollbar-color: #1eff00 rgba(0, 0, 0, 0.3);
+}
+        /* Scrollbar para Chrome/Safari/Edge */
+.modal-content::-webkit-scrollbar {
+    width: 6px;
+}
+.modal-content::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+}
+.modal-content::-webkit-scrollbar-thumb {
+    background: #1eff00;
+    border-radius: 3px;
+}
 
         .service-modal.active .modal-content {
             transform: scale(1) translateY(0);
@@ -628,7 +646,40 @@
                 left: 1rem;
                 font-size: 0.75rem;
             }
-        }
+            .modal-content {
+        width: 95%;
+        max-height: 95vh; /* Usa casi toda la pantalla en móvil */
+        padding: 1.5rem;
+        margin: auto; /* Asegura el centrado */
+    }
+
+    .modal-gif-container {
+        height: 180px; /* Reduce un poco el GIF en móvil para ahorrar espacio */
+    }
+
+    .modal-title {
+        font-size: 1.25rem; /* Título un poco más pequeño */
+    }
+
+    .modal-features {
+        grid-template-columns: 1fr; /* Una sola columna en móvil */
+    }
+
+    .modal-button {
+        width: 100%;
+        padding: 1.2rem; /* Más alto para ser fácil de tocar */
+        font-size: 1rem;
+        margin-top: 1rem; /* Espacio extra para que no quede pegado al borde */
+        position: relative;
+        z-index: 10;
+    }
+    
+    /* Ajuste de las esquinas en móvil para que no se salgan */
+    .modal-corner {
+        width: 15px;
+        height: 15px;
+    }
+}
 
         @keyframes glitch {
             0%, 100% { transform: translate(0); }
