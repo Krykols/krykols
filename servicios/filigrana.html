@@ -77,7 +77,39 @@
             opacity: 0.6; transition: opacity 0.3s ease;
         }
         .back-link:hover { opacity: 1; }
+/* ============================================
+   TÍTULO DE LA PÁGINA DE FILIGRANA
+   ============================================ */
+.titulo-filigrana {
+    font-size: clamp(1.8rem, 4.5vw, 3.5rem);
+    font-weight: 300;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 2.5rem;
+    text-align: center;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 2px 20px rgba(255, 215, 0, 0.2);
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 1.2s ease 0.3s, transform 1.2s ease 0.3s;
+}
 
+/* Animación de entrada cuando aparece la página */
+.page-content.visible .titulo-filigrana {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Responsive: ajustar espaciado en móvil */
+@media (max-width: 768px) {
+    .titulo-filigrana {
+        margin-bottom: 1.5rem;
+        letter-spacing: 0.15em;
+    }
+}
         /* Contenedor de la imagen de la Gioconda */
         .gioconda-wrapper {
             position: relative;
@@ -204,7 +236,19 @@
     <a href="../services.html" class="back-link">← Volver</a>
 
     <div class="page-content" id="pageContent">
-        
+ <div class="page-content" id="pageContent">
+    
+    <!-- NUEVO TÍTULO -->
+    <h1 class="titulo-filigrana">Joyas de Filigrana Momposina</h1>
+    
+    <div class="gioconda-wrapper" id="giocondaWrapper">
+        <!-- ... tus enlaces de joyas ... -->
+    </div>
+    
+    <footer class="footer">
+        <p>© 2026 Krykols · Todos los derechos reservados</p>
+    </footer>
+</div>       
         <div class="gioconda-wrapper" id="giocondaWrapper">
             <!-- ZONA CARA -->
             <a href="topos.html" class="joya-link pos-topos">Topos</a>
