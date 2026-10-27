@@ -6,7 +6,7 @@
     <title>Joyas de Filigrana Momposina | Krykols</title>
     <style>
         /* ============================================
-           POPUPS ESTILO RPG (INTACTOS)
+           POPUPS ESTILO RPG
            ============================================ */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html, body { 
@@ -24,7 +24,8 @@
         .rpg-overlay.active { opacity: 1; pointer-events: auto; }
         .rpg-popup { 
             position: relative; width: 90%; max-width: 600px; min-height: 400px; 
-            background-image: url('assets/images/advertencia.png'); 
+            /* CORREGIDO: Se agregó ../ para que funcione desde la carpeta servicios/ */
+            background-image: url('../assets/images/advertencia.png'); 
             background-size: cover; background-position: center; 
             border: 3px solid rgba(0, 0, 0, 0.692); border-radius: 12px; 
             padding: 3rem 2.5rem; display: flex; flex-direction: column; justify-content: space-between; 
@@ -62,7 +63,7 @@
         }
 
         /* ============================================
-           CONTENIDO: GIOCONDA Y ZONAS CLICKEABLES
+           CONTENIDO: TÍTULO, GIOCONDA Y ZONAS CLICKEABLES
            ============================================ */
         .page-content {
             position: relative; z-index: 10; min-height: 100vh; padding: 6rem 1rem 4rem;
@@ -77,106 +78,89 @@
             opacity: 0.6; transition: opacity 0.3s ease;
         }
         .back-link:hover { opacity: 1; }
-/* ============================================
-   TÍTULO DE LA PÁGINA DE FILIGRANA
-   ============================================ */
-.titulo-filigrana {
-    font-size: clamp(1.8rem, 4.5vw, 3.5rem);
-    font-weight: 300;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    margin-bottom: 2.5rem;
-    text-align: center;
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-shadow: 0 2px 20px rgba(255, 215, 0, 0.2);
-    opacity: 0;
-    transform: translateY(-20px);
-    transition: opacity 1.2s ease 0.3s, transform 1.2s ease 0.3s;
-}
 
-/* Animación de entrada cuando aparece la página */
-.page-content.visible .titulo-filigrana {
-    opacity: 1;
-    transform: translateY(0);
-}
+        /* TÍTULO DE LA PÁGINA */
+        .titulo-filigrana {
+            font-size: clamp(1.8rem, 4.5vw, 3.5rem);
+            font-weight: 300;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            margin-bottom: 2.5rem;
+            text-align: center;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 20px rgba(255, 215, 0, 0.2);
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 1.2s ease 0.3s, transform 1.2s ease 0.3s;
+        }
 
-/* Responsive: ajustar espaciado en móvil */
-@media (max-width: 768px) {
-    .titulo-filigrana {
-        margin-bottom: 1.5rem;
-        letter-spacing: 0.15em;
-    }
-}
+        .page-content.visible .titulo-filigrana {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         /* Contenedor de la imagen de la Gioconda */
         .gioconda-wrapper {
             position: relative;
             width: 100%;
             max-width: 600px; 
-            /* NOTA: Si la imagen se ve estirada o muy aplastada, cambia "3 / 4" por "4 / 5" o "9 / 16" según la proporción real de tu imagen */
             aspect-ratio: 3 / 4; 
             margin: 0 auto;
+            /* Nota: Si tu archivo es .jpg en lugar de .png, cámbialo aquí a Gioconda.jpg */
             background-image: url('../assets/images/Gioconda.png');
             background-size: contain;
             background-position: center top;
             background-repeat: no-repeat;
         }
 
-/* Estilo base para los enlaces/títulos de joyas */
-.joya-link {
-    position: absolute;
-    transform: translate(-50%, -50%);
-    color: #fff; /* ← CAMBIADO A BLANCO */
-    text-decoration: none;
-    font-size: clamp(0.75rem, 2.2vw, 1.1rem);
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95), 0 0 10px rgba(255, 255, 255, 0.3);
-    transition: all 0.3s ease;
-    cursor: pointer;
-    white-space: nowrap;
-    padding: 0.4rem 0.8rem;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    background: rgba(0, 0, 0, 0.2);
-    
-    /* ANIMACIÓN FLOTANTE */
-    animation: flotar 3s ease-in-out infinite;
-}
+        /* Estilo base para los enlaces/títulos de joyas */
+        .joya-link {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            text-decoration: none;
+            font-size: clamp(0.75rem, 2.2vw, 1.1rem);
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95), 0 0 10px rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            white-space: nowrap;
+            padding: 0.4rem 0.8rem;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            background: rgba(0, 0, 0, 0.2);
+            animation: flotar 3s ease-in-out infinite;
+        }
 
-/* Delays escalonados para efecto de "ola" */
-.pos-topos    { animation-delay: 0s; }
-.pos-aretes   { animation-delay: 0.3s; }
-.pos-collares { animation-delay: 0.6s; }
-.pos-cadenas  { animation-delay: 0.9s; }
-.pos-dijes    { animation-delay: 1.2s; }
-.pos-pulseras { animation-delay: 1.5s; }
-.pos-anillos  { animation-delay: 1.8s; }
+        /* Delays escalonados para efecto de "ola" */
+        .pos-topos    { animation-delay: 0s; }
+        .pos-aretes   { animation-delay: 0.3s; }
+        .pos-collares { animation-delay: 0.6s; }
+        .pos-cadenas  { animation-delay: 0.9s; }
+        .pos-dijes    { animation-delay: 1.2s; }
+        .pos-pulseras { animation-delay: 1.5s; }
+        .pos-anillos  { animation-delay: 1.8s; }
 
-/* Keyframe de la animación */
-@keyframes flotar {
-    0%, 100% {
-        transform: translate(-50%, -50%) translateY(0);
-    }
-    50% {
-        transform: translate(-50%, -50%) translateY(-8px); /* Sube 8px */
-    }
-}
+        @keyframes flotar {
+            0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+            50% { transform: translate(-50%, -50%) translateY(-8px); }
+        }
 
-.joya-link:hover {
-    color: #fff;
-    text-shadow: 0 0 15px rgba(255, 255, 255, 0.9); /* ← GLOW BLANCO */
-    border-color: rgba(255, 255, 255, 0.6);
-    background: rgba(0, 0, 0, 0.6);
-    transform: translate(-50%, -50%) scale(1.15);
-    animation-play-state: paused; /* Pausa la flotación al hacer hover */
-}
-        /* ============================================
-           COORDENADAS EXACTAS (Generadas por tus clicks)
-           ============================================ */
+        .joya-link:hover {
+            color: #fff;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.9);
+            border-color: rgba(255, 255, 255, 0.6);
+            background: rgba(0, 0, 0, 0.6);
+            transform: translate(-50%, -50%) scale(1.15);
+            animation-play-state: paused;
+        }
+
+        /* Coordenadas exactas */
         .pos-aretes   { top: 27.6%; left: 75.7%; }
         .pos-topos    { top: 28.6%; left: 20.4%; }
         .pos-cadenas  { top: 44.7%; left: 69.0%; }
@@ -195,6 +179,7 @@
             .rpg-text { font-size: 0.95rem; }
             .rpg-button { padding: 0.875rem 2rem; font-size: 0.875rem; }
             .gioconda-wrapper { max-width: 100%; }
+            .titulo-filigrana { margin-bottom: 1.5rem; letter-spacing: 0.15em; }
         }
     </style>
 </head>
@@ -232,34 +217,21 @@
         </div>
     </div>
 
-    <!-- Contenido de la página -->
+    <!-- Contenido de la página (ESTRUCTURA LIMPIA Y CORREGIDA) -->
     <a href="../services.html" class="back-link">← Volver</a>
 
     <div class="page-content" id="pageContent">
- <div class="page-content" id="pageContent">
-    
-    <!-- NUEVO TÍTULO -->
-    <h1 class="titulo-filigrana">Joyas de Filigrana Momposina</h1>
-    
-    <div class="gioconda-wrapper" id="giocondaWrapper">
-        <!-- ... tus enlaces de joyas ... -->
-    </div>
-    
-    <footer class="footer">
-        <p>© 2026 Krykols · Todos los derechos reservados</p>
-    </footer>
-</div>       
+        
+        <!-- TÍTULO -->
+        <h1 class="titulo-filigrana">Joyas de Filigrana Momposina</h1>
+        
+        <!-- IMAGEN Y ENLACES -->
         <div class="gioconda-wrapper" id="giocondaWrapper">
-            <!-- ZONA CARA -->
             <a href="topos.html" class="joya-link pos-topos">Topos</a>
             <a href="aretes.html" class="joya-link pos-aretes">Aretes</a>
-            
-            <!-- ZONA PECHO -->
             <a href="collares.html" class="joya-link pos-collares">Collares</a>
             <a href="cadenas.html" class="joya-link pos-cadenas">Cadenas</a>
             <a href="dijes.html" class="joya-link pos-dijes">Dijes</a>
-            
-            <!-- ZONA BRAZOS / MANOS -->
             <a href="pulseras.html" class="joya-link pos-pulseras">Pulseras</a>
             <a href="anillos.html" class="joya-link pos-anillos">Anillos</a>
         </div>
@@ -270,31 +242,22 @@
     </div>
 
     <script>
-        // ============================================
-        // CONTROL DE POPUPS
-        // ============================================
         const popup1 = document.getElementById('popup1');
         const popup2 = document.getElementById('popup2');
         const pageContent = document.getElementById('pageContent');
 
         function closePopup1() {
             popup1.classList.remove('active');
-            setTimeout(() => {
-                popup2.classList.add('active');
-            }, 800);
+            setTimeout(() => { popup2.classList.add('active'); }, 800);
         }
 
         function closePopup2() {
             popup2.classList.remove('active');
-            setTimeout(() => {
-                pageContent.classList.add('visible');
-            }, 800);
+            setTimeout(() => { pageContent.classList.add('visible'); }, 800);
         }
 
         window.addEventListener('load', () => {
-            setTimeout(() => {
-                popup1.classList.add('active');
-            }, 300);
+            setTimeout(() => { popup1.classList.add('active'); }, 300);
         });
     </script>
 </body>
