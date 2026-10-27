@@ -349,8 +349,8 @@
             pointer-events: none;
             transition: opacity 0.4s ease;
             padding: 1rem;
-            overflow-y: auto; /* Permite scroll general si el modal es muy alto */
-}
+            overflow-y: auto;
+        }
 
         .service-modal.active {
             opacity: 1;
@@ -362,30 +362,31 @@
             width: 95%;
             max-height: 90vh;
             background: rgba(0, 10, 20, 0.95);
-            overflow-y: auto
+            overflow-y: auto; /* ← CORREGIDO: Agregado punto y coma */
             border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 2.5rem;
             position: relative;
             transform: scale(0.9) translateY(20px);
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
+            
+            /* Barra de desplazamiento futurista (CORREGIDO: Ahora está DENTRO de la llave) */
+            scrollbar-width: thin;
+            scrollbar-color: #1eff00 rgba(0, 0, 0, 0.3);
         }
-            /* Barra de desplazamiento futurista */
-    scrollbar-width: thin;
-    scrollbar-color: #1eff00 rgba(0, 0, 0, 0.3);
-}
+
         /* Scrollbar para Chrome/Safari/Edge */
-.modal-content::-webkit-scrollbar {
-    width: 6px;
-}
-.modal-content::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 3px;
-}
-.modal-content::-webkit-scrollbar-thumb {
-    background: #1eff00;
-    border-radius: 3px;
-}
+        .modal-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        .modal-content::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 3px;
+        }
+        .modal-content::-webkit-scrollbar-thumb {
+            background: #1eff00;
+            border-radius: 3px;
+        }
 
         .service-modal.active .modal-content {
             transform: scale(1) translateY(0);
@@ -469,18 +470,18 @@
         }
 
         .modal-gif-container {
-    width: 100%;
-    min-height: 220px;
-    max-height: 400px;
-    background: rgba(0, 255, 0, 0.03);
-    border: 1px dashed rgba(255, 255, 255, 0.3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 1.5rem;
-    position: relative;
-    overflow: hidden;
-}
+            width: 100%;
+            min-height: 220px;
+            max-height: 400px;
+            background: rgba(0, 255, 0, 0.03);
+            border: 1px dashed rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
 
         .modal-gif-container::after {
             content: '';
@@ -638,48 +639,45 @@
             .service-card {
                 padding: 1.5rem;
             }
-            .modal-content {
-                padding: 2rem 1.5rem;
-            }
             .back-link {
                 top: 1rem;
                 left: 1rem;
                 font-size: 0.75rem;
             }
+            
             .modal-content {
-        width: 95%;
-        max-height: 95vh; /* Usa casi toda la pantalla en móvil */
-        padding: 1.5rem;
-        margin: auto; /* Asegura el centrado */
-    }
+                width: 95%;
+                max-height: 95vh;
+                padding: 1.5rem;
+                margin: auto;
+            }
 
-    .modal-gif-container {
-        height: 180px; /* Reduce un poco el GIF en móvil para ahorrar espacio */
-    }
+            .modal-gif-container {
+                min-height: 180px;
+            }
 
-    .modal-title {
-        font-size: 1.25rem; /* Título un poco más pequeño */
-    }
+            .modal-title {
+                font-size: 1.25rem;
+            }
 
-    .modal-features {
-        grid-template-columns: 1fr; /* Una sola columna en móvil */
-    }
+            .modal-features {
+                grid-template-columns: 1fr;
+            }
 
-    .modal-button {
-        width: 100%;
-        padding: 1.2rem; /* Más alto para ser fácil de tocar */
-        font-size: 1rem;
-        margin-top: 1rem; /* Espacio extra para que no quede pegado al borde */
-        position: relative;
-        z-index: 10;
-    }
-    
-    /* Ajuste de las esquinas en móvil para que no se salgan */
-    .modal-corner {
-        width: 15px;
-        height: 15px;
-    }
-}
+            .modal-button {
+                width: 100%;
+                padding: 1.2rem;
+                font-size: 1rem;
+                margin-top: 1rem;
+                position: relative;
+                z-index: 10;
+            }
+            
+            .modal-corner {
+                width: 15px;
+                height: 15px;
+            }
+        }
 
         @keyframes glitch {
             0%, 100% { transform: translate(0); }
@@ -915,7 +913,7 @@
                 description: 'Soy un profesional apasionado por crear soluciones digitales innovadoras que combinan diseño, tecnología y estrategia.',
                 features: ['Diseño UI/UX', 'Desarrollo web', 'Consultoría tech', 'Estrategia digital'],
                 button: 'VER PERFIL',
-                link: '/quien-soy.html',
+                link: 'servicios/quien-soy.html', /* ← CORREGIDO: Quitada la barra inicial */
                 gif: 'assets/images/quien-soy.gif'
             },
             'portafolio': {
@@ -924,13 +922,13 @@
                 description: 'Instagram, Facebook, Youtube, Twitch y Blog. Conecta con nuestra comunidad y descubre contenido exclusivo.',
                 features: ['Instagram', 'Facebook', 'Youtube', 'Twitch y Blog'],
                 button: 'VER REDES',
-                link: '/redes.html',
+                link: 'servicios/redes.html', /* ← CORREGIDO: Quitada la barra inicial */
                 gif: 'assets/images/redes.gif'
             }
         };
 
         // ============================================
-        // 3. VARIABLES GLOBALES (UNA SOLA VEZ)
+        // 3. VARIABLES GLOBALES
         // ============================================
         const serviceModal = document.getElementById('serviceModal');
         const timeDisplay = document.getElementById('timeDisplay');
@@ -974,11 +972,11 @@
         });
 
         // ============================================
-        // 7. CLICK EN BOTONES (Abre el modal correctamente)
+        // 7. CLICK EN BOTONES
         // ============================================
         document.querySelectorAll('.service-button').forEach(button => {
             button.addEventListener('click', function(e) {
-                e.stopPropagation(); // Evita doble trigger
+                e.stopPropagation();
                 
                 const card = this.closest('.service-card');
                 const serviceName = card.dataset.service;
@@ -1007,11 +1005,11 @@
             const featuresList = document.getElementById('modalFeatures');
             featuresList.innerHTML = service.features.map(feature => `<li>${feature}</li>`).join('');
 
-if (service.gif) {
-    modalGif.src = service.gif;           // ← Descomentado
-    modalGif.style.display = 'block';     // ← Descomentado
-    placeholderText.style.display = 'none'; // ← Descomentado
-}
+            if (service.gif) {
+                modalGif.src = service.gif;
+                modalGif.style.display = 'block';
+                placeholderText.style.display = 'none';
+            }
 
             serviceModal.classList.add('active');
             document.body.style.overflow = 'hidden';
