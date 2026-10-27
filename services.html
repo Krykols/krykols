@@ -357,54 +357,65 @@
             pointer-events: auto;
         }
 
-        .modal-content {
+        /* El marco exterior: contiene las esquinas y NO hace scroll */
+        .modal-frame {
             max-width: 700px;
             width: 95%;
             max-height: 90vh;
             background: rgba(0, 10, 20, 0.95);
-            overflow-y: auto; /* ← CORREGIDO: Agregado punto y coma */
             border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 2.5rem;
             position: relative;
             transform: scale(0.9) translateY(20px);
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .service-modal.active .modal-frame {
+            transform: scale(1) translateY(0);
+        }
+
+        /* El contenido interior: este es el que SÍ hace scroll */
+        .modal-scroll-content {
+            overflow-y: auto;
+            flex: 1;
+            padding-right: 10px; /* Espacio para la barra de scroll */
             
-            /* Barra de desplazamiento futurista (CORREGIDO: Ahora está DENTRO de la llave) */
+            /* Barra de desplazamiento futurista */
             scrollbar-width: thin;
             scrollbar-color: #1eff00 rgba(0, 0, 0, 0.3);
         }
 
         /* Scrollbar para Chrome/Safari/Edge */
-        .modal-content::-webkit-scrollbar {
+        .modal-scroll-content::-webkit-scrollbar {
             width: 6px;
         }
-        .modal-content::-webkit-scrollbar-track {
+        .modal-scroll-content::-webkit-scrollbar-track {
             background: rgba(0, 0, 0, 0.3);
             border-radius: 3px;
         }
-        .modal-content::-webkit-scrollbar-thumb {
+        .modal-scroll-content::-webkit-scrollbar-thumb {
             background: #1eff00;
             border-radius: 3px;
         }
 
-        .service-modal.active .modal-content {
-            transform: scale(1) translateY(0);
-        }
-
+        /* Esquinas fijas al marco */
         .modal-corner {
             position: absolute;
             width: 20px;
             height: 20px;
             border: 2px solid #fff;
             transition: all 0.3s ease;
+            z-index: 10;
         }
         .modal-corner.top-left { top: -2px; left: -2px; border-right: none; border-bottom: none; }
         .modal-corner.top-right { top: -2px; right: -2px; border-left: none; border-bottom: none; }
         .modal-corner.bottom-left { bottom: -2px; left: -2px; border-right: none; border-top: none; }
         .modal-corner.bottom-right { bottom: -2px; right: -2px; border-left: none; border-top: none; }
 
-        .modal-content:hover .modal-corner {
+        .modal-frame:hover .modal-corner {
             width: 30px;
             height: 30px;
             border-color: #1eff00;
@@ -417,6 +428,7 @@
             right: 40px;
             height: 1px;
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+            z-index: 5;
         }
         .modal-tech-line.top { top: 10px; }
         .modal-tech-line.bottom { bottom: 10px; }
@@ -436,7 +448,7 @@
             align-items: center;
             justify-content: center;
             transition: all 0.3s ease;
-            z-index: 10;
+            z-index: 20; /* Por encima del scroll */
         }
 
         .modal-close:hover {
@@ -592,6 +604,43 @@
             box-shadow: 0 0 20px rgba(30, 255, 0, 0.4);
         }
 
+        /* ============================================
+           RESPONSIVE DEL MODAL
+           ============================================ */
+        @media (max-width: 768px) {
+            .modal-frame {
+                width: 95%;
+                max-height: 95vh;
+                padding: 1.5rem;
+                margin: auto;
+            }
+
+            .modal-gif-container {
+                min-height: 180px;
+            }
+
+            .modal-title {
+                font-size: 1.25rem;
+            }
+
+            .modal-features {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-button {
+                width: 100%;
+                padding: 1.2rem;
+                font-size: 1rem;
+                margin-top: 1rem;
+                position: relative;
+                z-index: 10;
+            }
+            
+            .modal-corner {
+                width: 15px;
+                height: 15px;
+            }
+        }
         /* ============================================
            FOOTER
            ============================================ */
@@ -801,34 +850,41 @@
 
     <!-- Modal de detalles estilo Jarvis / EVE Online -->
     <div class="service-modal" id="serviceModal">
-        <div class="modal-content">
+        <!-- El marco exterior NO hace scroll, mantiene las esquinas fijas -->
+        <div class="modal-frame">
+            
+            <!-- Esquinas y líneas decorativas (Fijas) -->
             <div class="modal-corner top-left"></div>
             <div class="modal-corner top-right"></div>
             <div class="modal-corner bottom-left"></div>
             <div class="modal-corner bottom-right"></div>
-            
             <div class="modal-tech-line top"></div>
             <div class="modal-tech-line bottom"></div>
 
+            <!-- Botón de cerrar (Fijo) -->
             <button class="modal-close" onclick="closeModal()">×</button>
             
-            <div class="modal-header">
-                <h2 class="modal-title" id="modalTitle"></h2>
-                <div class="modal-id" id="modalId"></div>
-            </div>
-
-            <div class="modal-body">
-                <div class="modal-gif-container">
-                    <div class="gif-placeholder-text">
-                        <span class="blink">■</span> CARGANDO VISUALIZACIÓN DEL MÓDULO...
-                    </div>
-                    <img id="modalGif" src="" alt="Servicio GIF" style="display: none; max-width: 100%; max-height: 400px; object-fit: contain;">
+            <!-- El contenido interior SÍ hace scroll -->
+            <div class="modal-scroll-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="modalTitle"></h2>
+                    <div class="modal-id" id="modalId"></div>
                 </div>
 
-                <p class="modal-description" id="modalDescription"></p>
-                <ul class="modal-features" id="modalFeatures"></ul>
-                <a href="#" class="modal-button" id="modalButton">INICIAR MÓDULO</a>
+                <div class="modal-body">
+                    <div class="modal-gif-container">
+                        <div class="gif-placeholder-text">
+                            <span class="blink">■</span> CARGANDO VISUALIZACIÓN DEL MÓDULO...
+                        </div>
+                        <img id="modalGif" src="" alt="Servicio GIF" style="display: none; max-width: 100%; max-height: 400px; object-fit: contain;">
+                    </div>
+
+                    <p class="modal-description" id="modalDescription"></p>
+                    <ul class="modal-features" id="modalFeatures"></ul>
+                    <a href="#" class="modal-button" id="modalButton">INICIAR MÓDULO</a>
+                </div>
             </div>
+            
         </div>
     </div>
 
