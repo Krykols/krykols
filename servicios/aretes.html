@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topos | Krykols</title>
+    <link rel="stylesheet" href="../css/galeria.css">
+</head>
+<body>
+
+    <a href="filigrana.html" class="back-link">← Volver</a>
+
+    <div class="galeria-page">
+        <header class="galeria-header">
+            <h1>Aretes</h1>
+            <p class="subtitle">Elegancia tradicional en cada detalle</p>
+        </header>
+
+        <div class="galeria-grid" id="galeriaGrid">
+            <!-- Las imágenes se cargan automáticamente desde data-topos.js -->
+        </div>
+    </div>
+
+    <!-- Botón flotante de favoritos (GLOBAL) -->
+    <button class="btn-favoritos-flotante" id="btnFavoritos" onclick="abrirFavoritos()">
+        ♥ Ver Favoritos <span class="contador" id="contadorFavoritos">0</span>
+    </button>
+
+    <!-- Modal de favoritos -->
+    <div class="modal-favoritos" id="modalFavoritos">
+        <div class="modal-contenido">
+            <div class="modal-header">
+                <h2>Mis Favoritos</h2>
+                <button class="btn-cerrar" onclick="cerrarFavoritos()">✕</button>
+            </div>
+            <div class="galeria-grid" id="gridFavoritos"></div>
+            <p class="vacio-msg" id="vacioMsg">Aún no tienes favoritos. Haz clic en el ♥ de las fotos.</p>
+        </div>
+    </div>
+
+    <!-- Datos de la galería -->
+    <script src="../js/data-aretes.js"></script>
+    <!-- Lógica común -->
+    <script src="../js/favoritos.js"></script>
+    <script src="../js/galeria.js"></script>
+    
+    <script>
+        // Inicializar galería con los datos de topos
+        iniciarGaleria(galeriaAretes, 'aretes');
+    </script>
+</body>
+</html>
