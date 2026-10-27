@@ -1,0 +1,281 @@
+/* ============================================
+   ESTILOS GENERALES
+   ============================================ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background: #fff;
+    font-family: 'Segoe UI', -apple-system, sans-serif;
+    color: #222;
+    min-height: 100vh;
+}
+
+.back-link {
+    position: fixed; top: 1.5rem; left: 1.5rem; z-index: 100;
+    color: #222; text-decoration: none; font-size: 0.875rem;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    opacity: 0.6; transition: opacity 0.3s ease;
+}
+.back-link:hover { opacity: 1; }
+
+/* ============================================
+   HEADER DE GALERÍA
+   ============================================ */
+.galeria-page {
+    padding: 5rem 2rem 4rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.galeria-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.galeria-header h1 {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 300;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, #333 0%, #000 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.galeria-header .subtitle {
+    font-size: 1rem;
+    color: #888;
+    letter-spacing: 0.2em;
+    font-style: italic;
+}
+
+/* ============================================
+   GRID DE GALERÍA
+   ============================================ */
+.galeria-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.foto-item {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 8px;
+    background: #f5f5f5;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.foto-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.foto-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.foto-item:hover img {
+    transform: scale(1.05);
+}
+
+/* ============================================
+   CORAZÓN DE FAVORITOS
+   ============================================ */
+.btn-corazon {
+    position: absolute;
+    top: 0.8rem;
+    right: 0.8rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    color: #ccc;
+    transition: all 0.3s ease;
+    z-index: 5;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-corazon:hover {
+    transform: scale(1.15);
+    color: #ff4757;
+}
+
+.btn-corazon.activo {
+    color: #ff4757;
+    animation: latido 0.5s ease;
+}
+
+@keyframes latido {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.3); }
+    50% { transform: scale(0.95); }
+    75% { transform: scale(1.15); }
+}
+
+/* ============================================
+   BOTÓN FLOTANTE DE FAVORITOS
+   ============================================ */
+.btn-favoritos-flotante {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    padding: 1rem 1.8rem;
+    background: #000;
+    color: #fff;
+    border: 2px solid #000;
+    border-radius: 50px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    z-index: 500;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    animation: pulsar 2s ease-in-out infinite;
+}
+
+@keyframes pulsar {
+    0%, 100% { box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3); }
+    50% { box-shadow: 0 5px 35px rgba(0, 0, 0, 0.5), 0 0 0 8px rgba(0, 0, 0, 0.05); }
+}
+
+.btn-favoritos-flotante:hover {
+    background: #fff;
+    color: #000;
+    transform: translateY(-3px);
+}
+
+.contador {
+    background: #ff4757;
+    color: #fff;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    min-width: 24px;
+    text-align: center;
+}
+
+/* ============================================
+   MODAL DE FAVORITOS
+   ============================================ */
+.modal-favoritos {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    padding: 2rem;
+}
+
+.modal-favoritos.activo {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-contenido {
+    background: #fff;
+    width: 100%;
+    max-width: 1200px;
+    max-height: 90vh;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transform: scale(0.9);
+    transition: transform 0.4s ease;
+}
+
+.modal-favoritos.activo .modal-contenido {
+    transform: scale(1);
+}
+
+.modal-header {
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h2 {
+    font-size: 1.5rem;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+
+.btn-cerrar {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #666;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.btn-cerrar:hover {
+    background: #f0f0f0;
+    color: #000;
+}
+
+.modal-contenido .galeria-grid {
+    padding: 2rem;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.vacio-msg {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: #888;
+    font-style: italic;
+    display: none;
+}
+
+.vacio-msg.visible {
+    display: block;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+    .galeria-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 1rem;
+    }
+    .galeria-page { padding: 4rem 1rem 3rem; }
+    .btn-favoritos-flotante {
+        bottom: 1rem; right: 1rem;
+        padding: 0.8rem 1.2rem;
+        font-size: 0.8rem;
+    }
+}
