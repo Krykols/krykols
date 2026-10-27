@@ -24,7 +24,6 @@
         .rpg-overlay.active { opacity: 1; pointer-events: auto; }
         .rpg-popup { 
             position: relative; width: 90%; max-width: 600px; min-height: 400px; 
-            /* CORREGIDO: Se agregó ../ para que funcione desde la carpeta servicios/ */
             background-image: url('../assets/images/advertencia.png'); 
             background-size: cover; background-position: center; 
             border: 3px solid rgba(0, 0, 0, 0.692); border-radius: 12px; 
@@ -63,7 +62,7 @@
         }
 
         /* ============================================
-           CONTENIDO: TÍTULO, GIOCONDA Y ZONAS CLICKEABLES
+           CONTENIDO: TÍTULO, SUBTÍTULO, GIOCONDA Y ZONAS
            ============================================ */
         .page-content {
             position: relative; z-index: 10; min-height: 100vh; padding: 6rem 1rem 4rem;
@@ -85,7 +84,7 @@
             font-weight: 300;
             letter-spacing: 0.25em;
             text-transform: uppercase;
-            margin-bottom: 2.5rem;
+            margin-bottom: 0.5rem;
             text-align: center;
             background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
             -webkit-background-clip: text;
@@ -97,7 +96,23 @@
             transition: opacity 1.2s ease 0.3s, transform 1.2s ease 0.3s;
         }
 
-        .page-content.visible .titulo-filigrana {
+        /* SUBTÍTULO / ESLOGAN */
+        .subtitulo-filigrana {
+            font-size: clamp(1rem, 2.2vw, 1.25rem);
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.75);
+            text-align: center;
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+            letter-spacing: 0.05em;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 1.2s ease 0.6s, transform 1.2s ease 0.6s;
+        }
+
+        /* Animación de entrada conjunta */
+        .page-content.visible .titulo-filigrana,
+        .page-content.visible .subtitulo-filigrana {
             opacity: 1;
             transform: translateY(0);
         }
@@ -109,8 +124,7 @@
             max-width: 600px; 
             aspect-ratio: 3 / 4; 
             margin: 0 auto;
-            /* Nota: Si tu archivo es .jpg en lugar de .png, cámbialo aquí a Gioconda.jpg */
-            background-image: url('../assets/images/Gioconda.png');
+            background-image: url('../assets/images/Gioconda.png'); /* Cambia a .jpg si tu archivo es jpg */
             background-size: contain;
             background-position: center top;
             background-repeat: no-repeat;
@@ -179,7 +193,8 @@
             .rpg-text { font-size: 0.95rem; }
             .rpg-button { padding: 0.875rem 2rem; font-size: 0.875rem; }
             .gioconda-wrapper { max-width: 100%; }
-            .titulo-filigrana { margin-bottom: 1.5rem; letter-spacing: 0.15em; }
+            .titulo-filigrana { margin-bottom: 0.25rem; letter-spacing: 0.15em; }
+            .subtitulo-filigrana { margin-bottom: 1.5rem; }
         }
     </style>
 </head>
@@ -217,13 +232,14 @@
         </div>
     </div>
 
-    <!-- Contenido de la página (ESTRUCTURA LIMPIA Y CORREGIDA) -->
+    <!-- Contenido de la página -->
     <a href="../services.html" class="back-link">← Volver</a>
 
     <div class="page-content" id="pageContent">
         
-        <!-- TÍTULO -->
+        <!-- TÍTULO Y ESLOGAN (Aquí está el cambio) -->
         <h1 class="titulo-filigrana">Joyas de Filigrana Momposina</h1>
+        <p class="subtitulo-filigrana">El arte milenario de tejer la luz, tan eternas como su sonrisa.</p>
         
         <!-- IMAGEN Y ENLACES -->
         <div class="gioconda-wrapper" id="giocondaWrapper">
