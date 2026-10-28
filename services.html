@@ -78,16 +78,11 @@
             height: 8px;
             background: #1eff00;
             border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; box-shadow: 0 0 10px rgba(30, 255, 0, 0.8); }
-            50% { opacity: 0.3; box-shadow: 0 0 5px rgba(30, 255, 0, 0.3); }
+            animation: pulse-green 2s infinite;
         }
 
         .status-text {
-            color: #25bb00;
+            color: #1eff00;
         }
 
         .time-display {
@@ -218,11 +213,6 @@
             transform: translateX(5px);
         }
 
-        .service-card.active {
-            border-color: #fff;
-            box-shadow: 0 0 30px rgba(255, 255, 255, 0.6), inset 0 0 30px rgba(255, 255, 255, 0.2);
-        }
-
         .service-header {
             display: flex;
             justify-content: space-between;
@@ -236,20 +226,68 @@
             letter-spacing: 0.2em;
         }
 
+        /* ============================================
+           ESTADOS DE SERVICIO (SEMÁFORO)
+           ============================================ */
         .service-status {
             display: flex;
             align-items: center;
             gap: 0.5rem;
             font-size: 0.75rem;
-            color: #1ca700;
+            font-weight: bold;
+            letter-spacing: 0.05em;
         }
 
         .status-indicator-small {
-            width: 6px;
-            height: 6px;
-            background: #15ff00;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
-            animation: pulse 1.5s infinite;
+            flex-shrink: 0;
+        }
+
+        /* ACTIVO (Verde) */
+        .status-active {
+            color: #48ff0088;
+        }
+        .status-active .status-indicator-small {
+            background: #1eff00;
+            box-shadow: 0 0 8px rgba(30, 255, 0, 0.8);
+            animation: pulse-green 1.5s infinite;
+        }
+
+        /* SATURADO (Naranja/Amarillo) */
+        .status-saturated {
+            color: #ffaa0083;
+        }
+        .status-saturated .status-indicator-small {
+            background: #ffaa00;
+            box-shadow: 0 0 8px rgba(255, 170, 0, 0.8);
+            animation: pulse-orange 1.5s infinite;
+        }
+
+        /* INACTIVO TEMPORALMENTE (Rojo) */
+        .status-inactive {
+            color: #ff333385;
+        }
+        .status-inactive .status-indicator-small {
+            background: #ff3333;
+            box-shadow: 0 0 8px rgba(255, 51, 51, 0.8);
+            animation: pulse-red 1.5s infinite;
+        }
+
+        @keyframes pulse-green {
+            0%, 100% { opacity: 1; box-shadow: 0 0 10px rgba(30, 255, 0, 0.8); }
+            50% { opacity: 0.4; box-shadow: 0 0 5px rgba(30, 255, 0, 0.4); }
+        }
+
+        @keyframes pulse-orange {
+            0%, 100% { opacity: 1; box-shadow: 0 0 10px rgba(255, 170, 0, 0.8); }
+            50% { opacity: 0.4; box-shadow: 0 0 5px rgba(255, 170, 0, 0.4); }
+        }
+
+        @keyframes pulse-red {
+            0%, 100% { opacity: 1; box-shadow: 0 0 10px rgba(255, 51, 51, 0.8); }
+            50% { opacity: 0.4; box-shadow: 0 0 5px rgba(255, 51, 51, 0.4); }
         }
 
         .service-title {
@@ -357,7 +395,6 @@
             pointer-events: auto;
         }
 
-        /* El marco exterior: contiene las esquinas y NO hace scroll */
         .modal-frame {
             max-width: 700px;
             width: 95%;
@@ -377,18 +414,14 @@
             transform: scale(1) translateY(0);
         }
 
-        /* El contenido interior: este es el que SÍ hace scroll */
         .modal-scroll-content {
             overflow-y: auto;
             flex: 1;
-            padding-right: 10px; /* Espacio para la barra de scroll */
-            
-            /* Barra de desplazamiento futurista */
+            padding-right: 10px;
             scrollbar-width: thin;
-            scrollbar-color: #1eff00 rgba(0, 0, 0, 0.3);
+            scrollbar-color: #00ffbf rgba(0, 0, 0, 0.3);
         }
 
-        /* Scrollbar para Chrome/Safari/Edge */
         .modal-scroll-content::-webkit-scrollbar {
             width: 6px;
         }
@@ -397,11 +430,10 @@
             border-radius: 3px;
         }
         .modal-scroll-content::-webkit-scrollbar-thumb {
-            background: #1eff00;
+            background: #00ffbf;
             border-radius: 3px;
         }
 
-        /* Esquinas fijas al marco */
         .modal-corner {
             position: absolute;
             width: 20px;
@@ -418,8 +450,8 @@
         .modal-frame:hover .modal-corner {
             width: 30px;
             height: 30px;
-            border-color: #1eff00;
-            box-shadow: 0 0 10px rgba(30, 255, 0, 0.5);
+            border-color: #00ffbf;
+            box-shadow: 0 0 10px rgba(0, 255, 191, 0.5);
         }
 
         .modal-tech-line {
@@ -448,12 +480,12 @@
             align-items: center;
             justify-content: center;
             transition: all 0.3s ease;
-            z-index: 20; /* Por encima del scroll */
+            z-index: 20;
         }
 
         .modal-close:hover {
-            background: #1eff00;
-            border-color: #1eff00;
+            background: #00ffbf;
+            border-color: #00ffbf;
             color: #000;
             transform: rotate(90deg);
         }
@@ -476,7 +508,7 @@
 
         .modal-id {
             font-size: 0.7rem;
-            color: #1eff00;
+            color: #00ffbf;
             letter-spacing: 0.2em;
             font-family: 'Courier New', monospace;
         }
@@ -485,7 +517,7 @@
             width: 100%;
             min-height: 220px;
             max-height: 400px;
-            background: rgba(0, 255, 0, 0.03);
+            background: rgba(0, 255, 191, 0.03);
             border: 1px dashed rgba(255, 255, 255, 0.3);
             display: flex;
             align-items: center;
@@ -521,7 +553,7 @@
 
         .blink {
             animation: blink 1s step-end infinite;
-            color: #1eff00;
+            color: #00ffbf;
             margin-right: 8px;
         }
 
@@ -559,7 +591,7 @@
 
         .modal-features li::before {
             content: '▹';
-            color: #1eff00;
+            color: #00ffbf;
             font-size: 1rem;
         }
 
@@ -569,14 +601,14 @@
             text-align: center;
             padding: 1rem;
             background: transparent;
-            color: #1eff00;
+            color: #00ffbf;
             text-decoration: none;
             font-family: 'Courier New', monospace;
             font-weight: bold;
             font-size: 1rem;
             letter-spacing: 0.2em;
             text-transform: uppercase;
-            border: 1px solid #1eff00;
+            border: 1px solid #00ffbf;
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
@@ -590,7 +622,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: #1eff00;
+            background: #00ffbf;
             transition: left 0.3s ease;
             z-index: -1;
         }
@@ -601,46 +633,9 @@
 
         .modal-button:hover {
             color: #000;
-            box-shadow: 0 0 20px rgba(30, 255, 0, 0.4);
+            box-shadow: 0 0 20px rgba(0, 255, 191, 0.4);
         }
 
-        /* ============================================
-           RESPONSIVE DEL MODAL
-           ============================================ */
-        @media (max-width: 768px) {
-            .modal-frame {
-                width: 95%;
-                max-height: 95vh;
-                padding: 1.5rem;
-                margin: auto;
-            }
-
-            .modal-gif-container {
-                min-height: 180px;
-            }
-
-            .modal-title {
-                font-size: 1.25rem;
-            }
-
-            .modal-features {
-                grid-template-columns: 1fr;
-            }
-
-            .modal-button {
-                width: 100%;
-                padding: 1.2rem;
-                font-size: 1rem;
-                margin-top: 1rem;
-                position: relative;
-                z-index: 10;
-            }
-            
-            .modal-corner {
-                width: 15px;
-                height: 15px;
-            }
-        }
         /* ============================================
            FOOTER
            ============================================ */
@@ -694,7 +689,7 @@
                 font-size: 0.75rem;
             }
             
-            .modal-content {
+            .modal-frame {
                 width: 95%;
                 max-height: 95vh;
                 padding: 1.5rem;
@@ -776,46 +771,46 @@
             <div class="service-card" data-service="filigrana">
                 <div class="service-header">
                     <span class="service-number">FLG-001</span>
-                    <div class="service-status">
+                    <div class="service-status status-active">
                         <div class="status-indicator-small"></div>
                         <span>ACTIVO</span>
                     </div>
                 </div>
                 <h2 class="service-title">JOYAS DE FILIGRANA</h2>
-                <p class="service-description">Arte tradicional en plata. Piezas únicas elaboradas con técnicas ancestrales.</p>
+                <p class="service-description">Arte tradicional de Mompox en plata ley 950 o ley 925. Piezas únicas elaboradas con técnicas de tradición viva momposina.</p>
                 <button class="service-button">ACCEDER ▸</button>
             </div>
 
             <div class="service-card" data-service="legal">
                 <div class="service-header">
                     <span class="service-number">LEG-002</span>
-                    <div class="service-status">
+                    <div class="service-status status-saturated">
                         <div class="status-indicator-small"></div>
-                        <span>ACTIVO</span>
+                        <span>SATURADO</span>
                     </div>
                 </div>
                 <h2 class="service-title">CONSULTORÍA LEGAL</h2>
-                <p class="service-description">Asesoramiento jurídico integral. Más de 15 años de experiencia.</p>
+                <p class="service-description">Asesoramiento jurídico integral. Egresado de la UPTC con especialidad en producción de documentos jurídicos e investigación.</p>
                 <button class="service-button">ACCEDER ▸</button>
             </div>
 
             <div class="service-card" data-service="ia-legal">
                 <div class="service-header">
                     <span class="service-number">AIL-003</span>
-                    <div class="service-status">
+                    <div class="service-status status-inactive">
                         <div class="status-indicator-small"></div>
-                        <span>ACTIVO</span>
+                        <span>INACTIVO TEMPORALMENTE</span>
                     </div>
                 </div>
                 <h2 class="service-title">IA PARA ABOGADOS</h2>
-                <p class="service-description">Herramientas de inteligencia artificial open source para el sector legal.</p>
+                <p class="service-description">Herramientas de inteligencia artificial open source para redacción de documentos legales para cualquier persona.</p>
                 <button class="service-button">ACCEDER ▸</button>
             </div>
 
             <div class="service-card" data-service="quien-soy">
                 <div class="service-header">
                     <span class="service-number">PRF-004</span>
-                    <div class="service-status">
+                    <div class="service-status status-active">
                         <div class="status-indicator-small"></div>
                         <span>ACTIVO</span>
                     </div>
@@ -828,7 +823,7 @@
             <div class="service-card" data-service="portafolio">
                 <div class="service-header">
                     <span class="service-number">RED-005</span>
-                    <div class="service-status">
+                    <div class="service-status status-active">
                         <div class="status-indicator-small"></div>
                         <span>ACTIVO</span>
                     </div>
@@ -850,10 +845,7 @@
 
     <!-- Modal de detalles estilo Jarvis / EVE Online -->
     <div class="service-modal" id="serviceModal">
-        <!-- El marco exterior NO hace scroll, mantiene las esquinas fijas -->
         <div class="modal-frame">
-            
-            <!-- Esquinas y líneas decorativas (Fijas) -->
             <div class="modal-corner top-left"></div>
             <div class="modal-corner top-right"></div>
             <div class="modal-corner bottom-left"></div>
@@ -861,10 +853,8 @@
             <div class="modal-tech-line top"></div>
             <div class="modal-tech-line bottom"></div>
 
-            <!-- Botón de cerrar (Fijo) -->
             <button class="modal-close" onclick="closeModal()">×</button>
             
-            <!-- El contenido interior SÍ hace scroll -->
             <div class="modal-scroll-content">
                 <div class="modal-header">
                     <h2 class="modal-title" id="modalTitle"></h2>
@@ -884,7 +874,6 @@
                     <a href="#" class="modal-button" id="modalButton">INICIAR MÓDULO</a>
                 </div>
             </div>
-            
         </div>
     </div>
 
@@ -969,7 +958,7 @@
                 description: 'Soy un profesional apasionado por crear soluciones digitales innovadoras que combinan diseño, tecnología y estrategia.',
                 features: ['Diseño UI/UX', 'Desarrollo web', 'Consultoría tech', 'Estrategia digital'],
                 button: 'VER PERFIL',
-                link: 'servicios/quien-soy.html', /* ← CORREGIDO: Quitada la barra inicial */
+                link: 'servicios/quien-soy.html',
                 gif: 'assets/images/quien-soy.gif'
             },
             'portafolio': {
@@ -978,7 +967,7 @@
                 description: 'Instagram, Facebook, Youtube, Twitch y Blog. Conecta con nuestra comunidad y descubre contenido exclusivo.',
                 features: ['Instagram', 'Facebook', 'Youtube', 'Twitch y Blog'],
                 button: 'VER REDES',
-                link: 'servicios/redes.html', /* ← CORREGIDO: Quitada la barra inicial */
+                link: 'servicios/redes.html',
                 gif: 'assets/images/redes.gif'
             }
         };
