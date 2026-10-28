@@ -1,4 +1,1 @@
-Problemas de visualizacion del popup de servicios
-El fondo de las advertencias no está
-El título de la pagina de filigrana, en la cabeza de la Gioconda
-Agregar popup o zoom con lupa a las fotos?
+
