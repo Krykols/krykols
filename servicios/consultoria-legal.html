@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Consultoría Legal | Krykols</title>
+    <!-- Fuentes: Oswald para el impacto tipo comercial, Courier para el toque terminal -->
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -11,42 +13,34 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --neon-yellow: #FFD700;
+            --neon-cyan: #00ffbf;
+            --dark-bg: #050505;
+            --card-bg: rgba(20, 20, 20, 0.8);
+        }
+
         html, body {
             width: 100%;
             height: 100%;
             overflow-x: hidden;
-            background: #050810; /* Azul marino muy oscuro, casi negro */
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            color: #e2e8f0;
-            line-height: 1.6;
+            background: var(--dark-bg);
+            font-family: 'Courier Prime', monospace;
+            color: #fff;
         }
 
-        /* ============================================
-           FONDO FUTURISTA SERIO
-           ============================================ */
-        .bg-grid {
+        /* Fondo de cuadrícula sutil */
+        .grid-bg {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             background-image: 
-                linear-gradient(rgba(212, 175, 55, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(212, 175, 55, 0.03) 1px, transparent 1px);
-            background-size: 60px 60px;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        .bg-glow {
-            position: fixed;
-            top: -20%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80vw;
-            height: 80vh;
-            background: radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, transparent 70%);
-            z-index: 0;
+                linear-gradient(rgba(255, 215, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 215, 0, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: 1;
             pointer-events: none;
         }
 
@@ -56,576 +50,429 @@
         #main-content {
             position: relative;
             z-index: 10;
-        }
-
-        /* ============================================
-           HEADER & NAV
-           ============================================ */
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem 2rem;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
-            background: rgba(5, 8, 16, 0.8);
-            backdrop-filter: blur(10px);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .brand {
-            font-family: 'Courier New', monospace;
-            font-size: 1.25rem;
-            font-weight: bold;
-            color: #d4af37; /* Dorado */
-            letter-spacing: 0.1em;
+            padding: 2rem 1rem;
         }
 
         .back-link {
-            color: #94a3b8;
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            z-index: 100;
+            color: #fff;
             text-decoration: none;
             font-size: 0.875rem;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.15em;
             text-transform: uppercase;
-            transition: color 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.5rem 1rem;
         }
 
         .back-link:hover {
-            color: #d4af37;
+            opacity: 1;
+            border-color: var(--neon-yellow);
+            color: var(--neon-yellow);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
         }
 
         /* ============================================
-           HERO SECTION (PRIMERA IMPRESIÓN)
+           HERO SECTION (EL GANCHO)
            ============================================ */
         .hero {
-            min-height: 80vh;
+            min-height: 90vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 4rem 2rem;
-            max-width: 900px;
-            margin: 0 auto;
+            padding: 4rem 1rem;
+            position: relative;
         }
 
         .hero-badge {
-            display: inline-block;
+            background: var(--neon-yellow);
+            color: #000;
             padding: 0.5rem 1.5rem;
-            border: 1px solid rgba(212, 175, 55, 0.4);
-            border-radius: 50px;
-            font-size: 0.75rem;
+            font-family: 'Oswald', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
             letter-spacing: 0.2em;
             text-transform: uppercase;
-            color: #d4af37;
             margin-bottom: 2rem;
-            background: rgba(212, 175, 55, 0.05);
+            transform: skew(-10deg);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
         }
 
         .hero h1 {
-            font-size: clamp(2.5rem, 6vw, 4.5rem);
-            font-weight: 300;
-            line-height: 1.1;
+            font-family: 'Oswald', sans-serif;
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            line-height: 0.9;
             margin-bottom: 1.5rem;
-            color: #ffffff;
+            color: #fff;
+            text-shadow: 4px 4px 0px rgba(255, 215, 0, 0.2);
         }
 
         .hero h1 span {
-            font-weight: 700;
-            color: #d4af37;
+            color: var(--neon-yellow);
             display: block;
+            font-size: 0.6em;
+            letter-spacing: 0.1em;
+            margin-top: 0.5rem;
         }
 
         .hero p {
-            font-size: 1.125rem;
-            color: #94a3b8;
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: rgba(255, 255, 255, 0.7);
             max-width: 600px;
             margin-bottom: 3rem;
+            line-height: 1.6;
         }
 
-        /* BOTÓN PRINCIPAL DE ACCIÓN */
-        .cta-primary {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 1.25rem 3rem;
-            background: linear-gradient(135deg, #d4af37 0%, #b8962e 100%);
-            color: #050810;
-            text-decoration: none;
+        /* EL BOTÓN ESTRELLA */
+        .cta-button {
+            display: inline-block;
+            background: var(--neon-yellow);
+            color: #000;
+            font-family: 'Oswald', sans-serif;
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
             font-weight: 700;
-            font-size: 1rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .cta-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.4);
-            background: linear-gradient(135deg, #e5c14d 0%, #d4af37 100%);
-        }
-
-        /* ============================================
-           BARRA DE CONFIANZA (TRUST INDICATORS)
-           ============================================ */
-        .trust-bar {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            max-width: 1000px;
-            margin: 0 auto 6rem;
-            padding: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            text-align: center;
-        }
-
-        .trust-item h3 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #d4af37;
-            margin-bottom: 0.5rem;
-        }
-
-        .trust-item p {
-            font-size: 0.875rem;
-            color: #64748b;
             text-transform: uppercase;
             letter-spacing: 0.1em;
+            padding: 1.5rem 4rem;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+            animation: pulse-yellow 2s infinite;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.6);
+            background: #fff;
+        }
+
+        .cta-button::after {
+            content: '▸';
+            margin-left: 10px;
+        }
+
+        @keyframes pulse-yellow {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.4); }
+            50% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.8); }
+        }
+
+        .disclaimer {
+            margin-top: 2rem;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.4);
+            font-style: italic;
         }
 
         /* ============================================
-           SECCIONES GENERALES
+           SECCIÓN DE CONFIANZA (EL PITCH)
            ============================================ */
-        .section {
-            padding: 6rem 2rem;
-            max-width: 1100px;
+        .trust-section {
+            padding: 6rem 1rem;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
-        .section-header {
+        .section-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: clamp(2rem, 5vw, 3rem);
+            text-transform: uppercase;
             text-align: center;
             margin-bottom: 4rem;
+            color: var(--neon-cyan);
         }
 
-        .section-header h2 {
-            font-size: clamp(2rem, 4vw, 3rem);
-            font-weight: 300;
-            color: #fff;
-            margin-bottom: 1rem;
-        }
-
-        .section-header h2 span {
-            color: #d4af37;
-            font-weight: 600;
-        }
-
-        .section-header p {
-            color: #94a3b8;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        /* ============================================
-           GRID DE ESPECIALIDADES
-           ============================================ */
-        .expertise-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-        }
-
-        .card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(212, 175, 55, 0.15);
-            border-radius: 8px;
-            padding: 2.5rem 2rem;
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: #d4af37;
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.4s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(212, 175, 55, 0.4);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-            background: rgba(255, 255, 255, 0.04);
-        }
-
-        .card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .card-icon {
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-            color: #d4af37;
-        }
-
-        .card h3 {
-            font-size: 1.25rem;
-            color: #fff;
-            margin-bottom: 1rem;
-            font-weight: 600;
-        }
-
-        .card p {
-            font-size: 0.95rem;
-            color: #94a3b8;
-            line-height: 1.7;
-        }
-
-        /* ============================================
-           PROCESO (3 PASOS)
-           ============================================ */
-        .process-steps {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .step {
-            display: flex;
-            gap: 2rem;
-            align-items: flex-start;
-            padding: 2rem;
-            background: rgba(212, 175, 55, 0.03);
-            border-left: 3px solid #d4af37;
-            border-radius: 0 8px 8px 0;
-        }
-
-        .step-number {
-            font-family: 'Courier New', monospace;
-            font-size: 3rem;
-            font-weight: 700;
-            color: rgba(212, 175, 55, 0.2);
-            line-height: 1;
-        }
-
-        .step-content h3 {
-            font-size: 1.25rem;
-            color: #fff;
-            margin-bottom: 0.5rem;
-        }
-
-        .step-content p {
-            color: #94a3b8;
-            font-size: 0.95rem;
-        }
-
-        /* ============================================
-           TESTIMONIOS (PRUEBA SOCIAL)
-           ============================================ */
-        .testimonials-grid {
+        .features-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
         }
 
-        .testimonial {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+        .feature-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-left: 4px solid var(--neon-yellow);
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 215, 0, 0.05), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .feature-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--neon-yellow);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--neon-yellow);
+        }
+
+        .feature-card h3 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            letter-spacing: 0.05em;
+        }
+
+        .feature-card p {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        /* ============================================
+           SECCIÓN "SIN PREGUNTAS"
+           ============================================ */
+        .no-questions-section {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.05) 0%, rgba(0, 0, 0, 0) 100%);
+            border-top: 1px solid rgba(255, 215, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+            padding: 6rem 1rem;
+            text-align: center;
+            margin: 4rem 0;
+        }
+
+        .no-questions-section h2 {
+            font-family: 'Oswald', sans-serif;
+            font-size: clamp(2rem, 6vw, 4rem);
+            text-transform: uppercase;
+            color: #fff;
+            margin-bottom: 1.5rem;
+        }
+
+        .no-questions-section h2 span {
+            color: var(--neon-yellow);
+            text-decoration: underline;
+            text-decoration-color: var(--neon-cyan);
+        }
+
+        .no-questions-section p {
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.7;
+        }
+
+        /* ============================================
+           TESTIMONIOS (ESTILO CYBER)
+           ============================================ */
+        .testimonials {
+            padding: 4rem 1rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: rgba(0, 255, 191, 0.03);
+            border: 1px solid rgba(0, 255, 191, 0.2);
             padding: 2rem;
-            border-radius: 8px;
+            margin-bottom: 2rem;
             position: relative;
         }
 
-        .testimonial::before {
+        .testimonial-card::before {
             content: '"';
             position: absolute;
-            top: 1rem;
-            right: 1.5rem;
+            top: -20px;
+            left: 20px;
             font-size: 4rem;
-            color: rgba(212, 175, 55, 0.1);
+            color: var(--neon-cyan);
             font-family: serif;
             line-height: 1;
         }
 
-        .testimonial p {
+        .testimonial-text {
             font-style: italic;
-            color: #cbd5e1;
-            margin-bottom: 1.5rem;
-            line-height: 1.7;
-        }
-
-        .client-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .client-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #d4af37;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: #050810;
-            font-size: 0.875rem;
-        }
-
-        .client-name {
-            font-weight: 600;
-            color: #fff;
-            font-size: 0.9rem;
-        }
-
-        .client-role {
-            font-size: 0.75rem;
-            color: #64748b;
-        }
-
-        /* ============================================
-           CTA FINAL
-           ============================================ */
-        .final-cta {
-            text-align: center;
-            padding: 6rem 2rem;
-            background: linear-gradient(to bottom, transparent, rgba(212, 175, 55, 0.05));
-            border-top: 1px solid rgba(212, 175, 55, 0.1);
-        }
-
-        .final-cta h2 {
-            font-size: clamp(2rem, 4vw, 3rem);
-            color: #fff;
+            color: rgba(255, 255, 255, 0.9);
             margin-bottom: 1rem;
+            font-size: 1.1rem;
         }
 
-        .final-cta p {
-            color: #94a3b8;
-            margin-bottom: 2.5rem;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
+        .testimonial-author {
+            color: var(--neon-cyan);
+            font-weight: bold;
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+        }
+
+        .redacted {
+            background: #fff;
+            color: #fff;
+            padding: 0 4px;
+            cursor: help;
+            transition: all 0.3s ease;
+        }
+
+        .redacted:hover {
+            background: transparent;
+            color: #fff;
         }
 
         /* ============================================
            FOOTER
            ============================================ */
-        .footer {
+        .terminal-footer {
             text-align: center;
-            padding: 3rem 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            color: #475569;
-            font-size: 0.875rem;
+            padding: 4rem 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 0.1em;
         }
 
         /* ============================================
-           ANIMACIONES DE SCROLL
+           ANIMACIONES DE ENTRADA
            ============================================ */
-        .fade-in {
+        .reveal {
             opacity: 0;
             transform: translateY(30px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
+            transition: all 0.8s ease;
         }
 
-        .fade-in.visible {
+        .reveal.active {
             opacity: 1;
             transform: translateY(0);
         }
 
-        /* ============================================
-           RESPONSIVE
-           ============================================ */
+        /* Responsive */
         @media (max-width: 768px) {
-            .hero {
-                min-height: 70vh;
-                padding: 3rem 1.5rem;
+            .cta-button {
+                padding: 1.2rem 2rem;
+                width: 100%;
+                text-align: center;
             }
             
-            .trust-bar {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-                margin-bottom: 4rem;
-            }
-
-            .step {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .section {
-                padding: 4rem 1.5rem;
+            .back-link {
+                top: 1rem;
+                left: 1rem;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- Fondos decorativos -->
-    <div class="bg-grid"></div>
-    <div class="bg-glow"></div>
+    <div class="grid-bg"></div>
+
+    <a href="services.html" class="back-link">← VOLVER AL TERMINAL</a>
 
     <div id="main-content">
         
-        <!-- Barra superior -->
-        <header class="top-bar">
-            <div class="brand">KRYKOLS LEGAL</div>
-            <a href="services.html" class="back-link">← Volver a Servicios</a>
-        </header>
-
-        <!-- Hero Section -->
+        <!-- HERO SECTION -->
         <section class="hero">
-            <div class="hero-badge fade-in">Asesoría Jurídica de Vanguardia</div>
-            <h1 class="fade-in">
-                Protegemos su legado con
-                <span>Estrategia y Precisión</span>
+            <div class="hero-badge reveal">¿METIDO EN UN LÍO?</div>
+            <h1 class="reveal">
+                ¿PROBLEMAS LEGALES?
+                <span>O PROBLEMAS... "COMPLEJOS"</span>
             </h1>
-            <p class="fade-in">
-                Combinamos décadas de experiencia en derecho corporativo, civil y laboral con un enfoque moderno y resolutivo. Su tranquilidad es nuestra prioridad.
+            <p class="reveal">
+                En Krykols no juzgamos. Resolvemos. Ya sea un contrato, una demanda o una situación que <em>prefieres no mencionar en voz alta</em>, tenemos la estrategia, los contactos y la discreción que necesitas.
             </p>
-            <a href="agendarconsulta.html" class="cta-primary fade-in">
-                Agendar Consulta Ahora
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-            </a>
-        </section>
-
-        <!-- Barra de Confianza -->
-        <div class="trust-bar fade-in">
-            <div class="trust-item">
-                <h3>15+</h3>
-                <p>Años de Experiencia</p>
-            </div>
-            <div class="trust-item">
-                <h3>500+</h3>
-                <p>Casos Resueltos</p>
-            </div>
-            <div class="trust-item">
-                <h3>98%</h3>
-                <p>Tasa de Éxito</p>
-            </div>
-        </div>
-
-        <!-- Especialidades -->
-        <section class="section">
-            <div class="section-header fade-in">
-                <h2>Áreas de <span>Práctica</span></h2>
-                <p>Soluciones legales integrales adaptadas a las necesidades específicas de su empresa o situación personal.</p>
-            </div>
             
-            <div class="expertise-grid">
-                <div class="card fade-in">
-                    <div class="card-icon">⚖️</div>
-                    <h3>Derecho Corporativo</h3>
-                    <p>Constitución de sociedades, fusiones, adquisiciones y gobierno corporativo. Blindamos la estructura legal de su negocio.</p>
+            <a href="agendarconsulta.html" class="cta-button reveal">
+                ¡AGENDAR CITA AHORA!
+            </a>
+            
+            <p class="disclaimer reveal">
+                * Primera consulta de evaluación de riesgo gratuita. Confidencialidad garantizada por protocolo.
+            </p>
+        </section>
+
+        <!-- PITCH DE CONFIANZA -->
+        <section class="trust-section">
+            <h2 class="section-title reveal">¿POR QUÉ KRYKOLS?</h2>
+            
+            <div class="features-grid">
+                <div class="feature-card reveal">
+                    <div class="feature-icon">⚖️</div>
+                    <h3>Resultados, no excusas</h3>
+                    <p>No te vendemos horas de reloj, te vendemos soluciones. Nuestro historial habla por sí solo: casos cerrados, multas reducidas y problemas que "desaparecieron" del radar.</p>
                 </div>
-                <div class="card fade-in">
-                    <div class="card-icon">📄</div>
-                    <h3>Contratos y Negocios</h3>
-                    <p>Redacción, revisión y negociación de contratos comerciales para minimizar riesgos y maximizar beneficios.</p>
+
+                <div class="feature-card reveal">
+                    <div class="feature-icon">🤐</div>
+                    <h3>Discreción Absoluta</h3>
+                    <p>Lo que pasa en esta consulta, se queda en esta consulta. Utilizamos protocolos de encriptación y acuerdos de confidencialidad blindados. Tu reputación está segura.</p>
                 </div>
-                <div class="card fade-in">
-                    <div class="card-icon">👥</div>
-                    <h3>Derecho Laboral</h3>
-                    <p>Asesoría en relaciones laborales, despidos, negociaciones colectivas y cumplimiento normativo.</p>
-                </div>
-                <div class="card fade-in">
-                    <div class="card-icon">🏛️</div>
-                    <h3>Litigio Civil</h3>
-                    <p>Representación robusta en disputas civiles, responsabilidad contractual y extracontractual.</p>
+
+                <div class="feature-card reveal">
+                    <div class="feature-icon">🧠</div>
+                    <h3>Soluciones Creativas</h3>
+                    <p>La ley es un sistema, y todos los sistemas tienen vulnerabilidades. Encontramos el camino legal (y a veces, creativo) para que salgas ganando, sin importar las probabilidades.</p>
                 </div>
             </div>
         </section>
 
-        <!-- Proceso de Trabajo -->
-        <section class="section">
-            <div class="section-header fade-in">
-                <h2>Nuestro <span>Proceso</span></h2>
-                <p>Transparencia y metodología en cada etapa de su caso.</p>
-            </div>
-
-            <div class="process-steps">
-                <div class="step fade-in">
-                    <div class="step-number">01</div>
-                    <div class="step-content">
-                        <h3>Diagnóstico Inicial</h3>
-                        <p>Analizamos su situación en una consulta confidencial para identificar riesgos, oportunidades y objetivos claros.</p>
-                    </div>
-                </div>
-                <div class="step fade-in">
-                    <div class="step-number">02</div>
-                    <div class="step-content">
-                        <h3>Diseño de Estrategia</h3>
-                        <p>Desarrollamos un plan de acción legal a medida, detallando plazos, costos estimados y escenarios probables.</p>
-                    </div>
-                </div>
-                <div class="step fade-in">
-                    <div class="step-number">03</div>
-                    <div class="step-content">
-                        <h3>Ejecución y Seguimiento</h3>
-                        <p>Implementamos la estrategia con rigor, manteniéndolo informado en cada paso hasta la resolución favorable.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Testimonios -->
-        <section class="section">
-            <div class="section-header fade-in">
-                <h2>Confianza <span>Comprobada</span></h2>
-            </div>
-            <div class="testimonials-grid">
-                <div class="testimonial fade-in">
-                    <p>"La precisión y el conocimiento del equipo de Krykols fueron determinantes para resolver un litigio corporativo complejo que llevábamos años arrastrando."</p>
-                    <div class="client-info">
-                        <div class="client-avatar">MR</div>
-                        <div>
-                            <div class="client-name">María Rodríguez</div>
-                            <div class="client-role">CEO, TechSolutions SAS</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial fade-in">
-                    <p>"Me brindaron una asesoría clara, sin tecnicismos innecesarios y con resultados tangibles. Totalmente recomendados para temas laborales."</p>
-                    <div class="client-info">
-                        <div class="client-avatar">CP</div>
-                        <div>
-                            <div class="client-name">Carlos Pérez</div>
-                            <div class="client-role">Director de RRHH</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- CTA Final -->
-        <section class="final-cta fade-in">
-            <h2>No deje su futuro legal al azar</h2>
-            <p>Agende una consulta inicial y descubra cómo podemos proteger sus intereses con la mejor estrategia jurídica.</p>
-            <a href="agendarconsulta.html" class="cta-primary">
-                Reservar Mi Cita Ahora
+        <!-- SECCIÓN SIN PREGUNTAS -->
+        <section class="no-questions-section reveal">
+            <h2>NO HACEMOS <span>PREGUNTAS</span>.</h2>
+            <p>
+                No nos importa si fue un error de cálculo, un socio desleal o una situación que se salió de control. 
+                Nuestro trabajo no es juzgar tu pasado, es blindar tu futuro. 
+                <br><br>
+                <strong>Trae el problema. Nosotros ponemos la solución.</strong>
+            </p>
+            <a href="agendarconsulta.html" class="cta-button">
+                HABLAR CON UN EXPERTO
             </a>
         </section>
 
-        <!-- Footer -->
-        <footer class="footer">
-            <p>© 2026 Krykols Systems · Consultoría Legal. Todos los derechos reservados.</p>
-            <p style="margin-top: 0.5rem; font-size: 0.75rem;">La información en este sitio no constituye asesoramiento legal formal hasta la firma de un contrato de servicios.</p>
+        <!-- TESTIMONIOS -->
+        <section class="testimonials">
+            <h2 class="section-title reveal">CASOS DE ÉXITO</h2>
+            
+            <div class="testimonial-card reveal">
+                <p class="testimonial-text">
+                    Pensé que mi empresa estaba acabada tras la auditoría. Krykols no solo encontró una brecha en el procedimiento, sino que logró que la multa se convirtiera en una advertencia. Simplemente <span class="redacted">magia</span> legal.
+                </p>
+                <div class="testimonial-author">- CEO, Sector Tecnológico (Identidad Protegida)</div>
+            </div>
+
+            <div class="testimonial-card reveal">
+                <p class="testimonial-text">
+                    Necesitaba recuperar algo que era mío por derecho, pero el sistema se interponía. El equipo de Krykols entendió la urgencia y actuó con una velocidad y discreción que no creí posible. 100% recomendados.
+                </p>
+                <div class="testimonial-author">- Cliente Particular, Caso #884-A</div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="terminal-footer">
+            <p>© 2026 KRYKOLS SYSTEMS · CONSULTORÍA LEGAL ESTRATÉGICA</p>
+            <p style="margin-top: 0.5rem; font-size: 0.625rem;">
+                ADVERTENCIA: La información proporcionada en este sitio no constituye una garantía de resultado, pero sí un compromiso de esfuerzo máximo. 
+                <br>La confidencialidad es nuestra prioridad número uno.
+            </p>
         </footer>
 
     </div>
@@ -634,23 +481,36 @@
         // ============================================
         // ANIMACIÓN DE APARICIÓN AL HACER SCROLL
         // ============================================
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: "0px 0px -50px 0px"
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target); // Solo animar una vez
+        function revealOnScroll() {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            for (let i = 0; i < reveals.length; i++) {
+                const windowHeight = window.innerHeight;
+                const elementTop = reveals[i].getBoundingClientRect().top;
+                const elementVisible = 100;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add('active');
                 }
-            });
-        }, observerOptions);
+            }
+        }
 
-        document.querySelectorAll('.fade-in').forEach(el => {
-            observer.observe(el);
-        });
+        window.addEventListener('scroll', revealOnScroll);
+        // Disparar una vez al cargar para los elementos visibles inicialmente
+        revealOnScroll();
+
+        // ============================================
+        // EFECTO GLITCH SUTIL EN EL TÍTULO (OPCIONAL)
+        // ============================================
+        const title = document.querySelector('.hero h1');
+        setInterval(() => {
+            if (Math.random() > 0.95) {
+                title.style.textShadow = '4px 4px 0px rgba(255, 0, 0, 0.4), -2px -2px 0px rgba(0, 255, 191, 0.4)';
+                setTimeout(() => {
+                    title.style.textShadow = '4px 4px 0px rgba(255, 215, 0, 0.2)';
+                }, 100);
+            }
+        }, 2000);
     </script>
 </body>
 </html>
