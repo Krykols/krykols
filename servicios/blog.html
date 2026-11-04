@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Neural Feed | Krykols Blog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --neon-cyan: #00f3ff;
+            --neon-purple: #9d4edd;
+            --dark-bg: #050508;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--dark-bg);
+            color: #e0e0e0;
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* ============================================
+           FONDO DE RED NEURONAL (CANVAS)
+           ============================================ */
+        #neural-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ============================================
+           CONTENIDO PRINCIPAL
+           ============================================ */
+        .main-container {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+
+        /* ============================================
+           HEADER
+           ============================================ */
+        .blog-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            padding-top: 2rem;
+        }
+
+        .back-link {
+            position: absolute;
+            top: 2rem;
+            left: 1.5rem;
+            color: var(--neon-cyan);
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            border: 1px solid var(--neon-cyan);
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+            background: rgba(0, 243, 255, 0.05);
+        }
+
+        .back-link:hover {
+            background: var(--neon-cyan);
+            color: #000;
+            box-shadow: 0 0 15px var(--neon-cyan);
+        }
+
+        .blog-header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, #fff, var(--neon-cyan), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .blog-header p {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 0.1em;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tag-bmi {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.25rem 0.75rem;
+            border: 1px solid var(--neon-purple);
+            color: var(--neon-purple);
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            border-radius: 2px;
+        }
+
+        /* ============================================
+           GRID TIPO REVISTA
+           ============================================ */
+        .magazine-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-auto-rows: minmax(300px, auto);
+            gap: 2rem;
+        }
+
+        /* ============================================
+           TARJETA DE ARTÍCULO
+           ============================================ */
+        .article-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .article-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Artículo destacado (ocupa 2 columnas y 2 filas) */
+        .article-card.featured {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+
+        .article-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 10px 40px rgba(0, 243, 255, 0.15);
+        }
+
+        .card-image-wrapper {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .article-card.featured .card-image-wrapper {
+            height: 400px;
+        }
+
+        .article-card:not(.featured) .card-image-wrapper {
+            height: 200px;
+        }
+
+        .card-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .article-card:hover .card-image-wrapper img {
+            transform: scale(1.05);
+        }
+
+        .card-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to top, rgba(5,5,8,0.9) 0%, rgba(5,5,8,0) 60%);
+            pointer-events: none;
+        }
+
+.card-category {
+    position: absolute;
+    bottom: 1rem;   /* 👈 Cambiado de top a bottom */
+    left: 1rem;
+    background: rgba(0, 0, 0, 0.7);
+    color: var(--neon-cyan);
+    padding: 0.25rem 0.75rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-left: 2px solid var(--neon-cyan);
+    z-index: 2;     /* 👈 Asegura que esté sobre el overlay */
+    backdrop-filter: blur(4px); /* 👈 Efecto vidrio sutil para legibilidad */
+}
+
+        .card-content {
+            padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-date {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 0.5rem;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .card-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.75rem;
+            line-height: 1.3;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .card-title:hover {
+            color: var(--neon-cyan);
+        }
+
+        .article-card.featured .card-title {
+            font-size: 1.75rem;
+        }
+
+        .card-excerpt {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            flex: 1;
+        }
+
+        /* ============================================
+           SISTEMA DE LIKES
+           ============================================ */
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .read-more {
+            color: var(--neon-cyan);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: gap 0.3s ease;
+        }
+
+        .read-more:hover {
+            gap: 0.8rem;
+        }
+
+        .like-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .like-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .like-btn:hover {
+            border-color: #ff2a6d;
+            background: rgba(255, 42, 109, 0.1);
+        }
+
+        .like-btn.liked {
+            border-color: #ff2a6d;
+            background: rgba(255, 42, 109, 0.2);
+            color: #ff2a6d;
+        }
+
+        .like-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            transition: transform 0.3s ease;
+        }
+
+        .like-btn.liked svg {
+            fill: #ff2a6d;
+            animation: heartPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes heartPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.4); }
+            100% { transform: scale(1); }
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        .blog-footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 900px) {
+            .magazine-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .article-card.featured {
+                grid-column: span 2;
+                grid-row: span 1;
+            }
+            .article-card.featured .card-image-wrapper {
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .magazine-grid {
+                grid-template-columns: 1fr;
+            }
+            .article-card.featured {
+                grid-column: span 1;
+            }
+            .blog-header h1 {
+                font-size: 2rem;
+            }
+            .back-link {
+                position: relative;
+                top: 0; left: 0;
+                display: inline-block;
+                margin-bottom: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Fondo de Red Neuronal -->
+    <canvas id="neural-canvas"></canvas>
+
+    <div class="main-container">
+        <a href="../../services.html" class="back-link">← Volver al Sistema</a>
+
+        <header class="blog-header">
+            <h1>NEURAL FEED</h1>
+            <p>Actualizaciones sinápticas, marcos legales de BMI y el futuro de la cognición aumentada.</p>
+            <span class="tag-bmi">Certificado bajo Protocolo Legal BMI-2026</span>
+        </header>
+
+        <main class="magazine-grid">
+            
+            <!-- ARTÍCULO DESTACADO -->
+            <article class="article-card featured" data-id="art-001">
+                <div class="card-image-wrapper" onclick="window.location.href='articulo-bmi-legal.html'">
+                    <!-- REEMPLAZA ESTA URL CON: ../assets/images/blog-portada-1.jpg -->
+                    <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=800&auto=format&fit=crop" alt="Interfaz Cerebro Computadora">
+                    <div class="card-overlay"></div>
+                    <span class="card-category">Marco Legal</span>
+                </div>
+                <div class="card-content">
+                    <div class="card-date">04 NOV 2026 · 8 MIN LECTURA</div>
+                    <h2 class="card-title" onclick="window.location.href='articulo-bmi-legal.html'">La Nueva Frontera: Regulación Ética de las Interfaces Cerebro-Computadora</h2>
+                    <p class="card-excerpt">Un análisis profundo sobre cómo las nuevas leyes de 2026 protegen la privacidad neuronal sin frenar la innovación en el campo de la IA aumentada.</p>
+                    <div class="card-footer">
+                        <a href="articulo-bmi-legal.html" class="read-more">Leer Transmisión →</a>
+                        <div class="like-container">
+                            <button class="like-btn" onclick="toggleLike(this, 'art-001')">
+                                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                                <span class="like-count">2,847</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ARTÍCULO 2 -->
+            <article class="article-card" data-id="art-002">
+                <div class="card-image-wrapper" onclick="window.location.href='articulo-ia-generativa.html'">
+                    <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=600&auto=format&fit=crop" alt="IA Generativa">
+                    <div class="card-overlay"></div>
+                    <span class="card-category">Desarrollo</span>
+                </div>
+                <div class="card-content">
+                    <div class="card-date">01 NOV 2026 · 5 MIN</div>
+                    <h3 class="card-title" onclick="window.location.href='articulo-ia-generativa.html'">Algoritmos que Sueñan</h3>
+                    <p class="card-excerpt">Cómo los nuevos modelos de red neuronal están empezando a generar patrones creativos no supervisados.</p>
+                    <div class="card-footer">
+                        <a href="articulo-ia-generativa.html" class="read-more">Leer →</a>
+                        <div class="like-container">
+                            <button class="like-btn" onclick="toggleLike(this, 'art-002')">
+                                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                                <span class="like-count">1,204</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ARTÍCULO 3 -->
+            <article class="article-card" data-id="art-003">
+                <div class="card-image-wrapper" onclick="window.location.href='articulo-ciberseguridad.html'">
+                    <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=600&auto=format&fit=crop" alt="Ciberseguridad">
+                    <div class="card-overlay"></div>
+                    <span class="card-category">Seguridad</span>
+                </div>
+                <div class="card-content">
+                    <div class="card-date">28 OCT 2026 · 6 MIN</div>
+                    <h3 class="card-title" onclick="window.location.href='articulo-ciberseguridad.html'">Firewalls Neurales</h3>
+                    <p class="card-excerpt">Protegiendo la mente digital: nuevas arquitecturas de defensa contra intrusiones cognitivas.</p>
+                    <div class="card-footer">
+                        <a href="articulo-ciberseguridad.html" class="read-more">Leer →</a>
+                        <div class="like-container">
+                            <button class="like-btn" onclick="toggleLike(this, 'art-003')">
+                                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                                <span class="like-count">956</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ARTÍCULO 4 -->
+            <article class="article-card" data-id="art-004">
+                <div class="card-image-wrapper" onclick="window.location.href='articulo-hardware.html'">
+                    <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=600&auto=format&fit=crop" alt="Hardware">
+                    <div class="card-overlay"></div>
+                    <span class="card-category">Hardware</span>
+                </div>
+                <div class="card-content">
+                    <div class="card-date">25 OCT 2026 · 4 MIN</div>
+                    <h3 class="card-title" onclick="window.location.href='articulo-hardware.html'">Chips de Grafeno</h3>
+                    <p class="card-excerpt">La transición del silicio al grafeno en los implantes de última generación.</p>
+                    <div class="card-footer">
+                        <a href="articulo-hardware.html" class="read-more">Leer →</a>
+                        <div class="like-container">
+                            <button class="like-btn" onclick="toggleLike(this, 'art-004')">
+                                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                                <span class="like-count">3,102</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+        </main>
+
+        <footer class="blog-footer">
+            <p>© 2026 KRYKOLS SYSTEMS · NODO DE PUBLICACIÓN NEURAL ACTIVO</p>
+            <p style="margin-top: 0.5rem; font-size: 0.7rem;">TODOS LOS DATOS DE INTERACCIÓN SE PROCESAN LOCALMENTE</p>
+        </footer>
+    </div>
+
+    <script>
+        /* ============================================
+           1. SISTEMA DE LIKES (SIN CUENTAS, LOCALSTORAGE)
+           ============================================ */
+        // Inicializar o recuperar likes del almacenamiento local
+        const storedLikes = JSON.parse(localStorage.getItem('krykols_blog_likes')) || {
+            'art-001': 2847,
+            'art-002': 1204,
+            'art-003': 956,
+            'art-004': 3102
+        };
+
+        // Actualizar contadores visuales al cargar
+        document.querySelectorAll('.article-card').forEach(card => {
+            const id = card.getAttribute('data-id');
+            const countSpan = card.querySelector('.like-count');
+            const btn = card.querySelector('.like-btn');
+            
+            if (countSpan) countSpan.textContent = storedLikes[id].toLocaleString();
+
+            // Marcar como "liked" si el usuario ya dio like en este navegador
+            if (localStorage.getItem(`liked_${id}`) === 'true') {
+                btn.classList.add('liked');
+            }
+        });
+
+        function toggleLike(btn, articleId) {
+            const hasLiked = localStorage.getItem(`liked_${articleId}`) === 'true';
+            const countSpan = btn.querySelector('.like-count');
+            
+            if (hasLiked) {
+                // Quitar like
+                storedLikes[articleId]--;
+                localStorage.setItem(`liked_${articleId}`, 'false');
+                btn.classList.remove('liked');
+            } else {
+                // Dar like
+                storedLikes[articleId]++;
+                localStorage.setItem(`liked_${articleId}`, 'true');
+                btn.classList.add('liked');
+            }
+            
+            // Guardar y actualizar vista
+            localStorage.setItem('krykols_blog_likes', JSON.stringify(storedLikes));
+            countSpan.textContent = storedLikes[articleId].toLocaleString();
+        }
+
+        /* ============================================
+           2. ANIMACIÓN DE ENTRADA (SCROLL REVEAL)
+           ============================================ */
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 100); // Efecto cascada
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.article-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        /* ============================================
+           3. FONDO DE RED NEURONAL (CANVAS)
+           ============================================ */
+        const canvas = document.getElementById('neural-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        let width, height;
+        let particles = [];
+        const particleCount = 60; // Número de nodos
+        const connectionDistance = 150; // Distancia para conectar líneas
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.5; // Velocidad lenta
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.size = Math.random() * 2 + 1;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Rebotar en los bordes
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(0, 243, 255, 0.5)'; // Color cian
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            
+            // Dibujar conexiones primero (detrás de los nodos)
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < connectionDistance) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(0, 243, 255, ${1 - distance / connectionDistance})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            // Dibujar y actualizar nodos
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', () => {
+            resize();
+            initParticles();
+        });
+
+        // Iniciar
+        resize();
+        initParticles();
+        animate();
+    </script>
+</body>
+</html>
