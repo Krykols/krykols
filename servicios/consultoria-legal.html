@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Consultoría Legal | Krykols</title>
+    <!-- Fuentes: Oswald para el impacto tipo comercial, Courier para el toque terminal -->
     <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -28,6 +29,7 @@
             color: #fff;
         }
 
+        /* Fondo de cuadrícula sutil */
         .grid-bg {
             position: fixed;
             top: 0;
@@ -42,6 +44,9 @@
             pointer-events: none;
         }
 
+        /* ============================================
+           CONTENIDO PRINCIPAL
+           ============================================ */
         #main-content {
             position: relative;
             z-index: 10;
@@ -71,6 +76,9 @@
             box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
         }
 
+        /* ============================================
+           HERO SECTION (EL GANCHO)
+           ============================================ */
         .hero {
             min-height: 90vh;
             display: flex;
@@ -123,25 +131,26 @@
             line-height: 1.6;
         }
 
-        /* CORRECCIÓN: Clip-path válido */
-        .cta-button {
-            display: inline-block;
-            background: var(--neon-yellow);
-            color: #000;
-            font-family: 'Oswald', sans-serif;
-            font-size: clamp(1.2rem, 3vw, 1.8rem);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            padding: 1.5rem 4rem;
-            text-decoration: none;
-            border: none;
-            cursor: pointer;
-            position: relative;
-            transition: all 0.3s ease;
-            clip-path: polygon(5% 0, 100% 0, 100% 75%, 95% 100%, 0 100%, 0 25%);
-            animation: pulse-yellow 2s infinite;
-        }
+        /* EL BOTÓN ESTRELLA */.cta-button {
+    display: inline-block;
+    background: var(--neon-yellow);
+    color: #000;
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 1.5rem 4rem;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    position: relative; /* <-- AGREGADO: Corrige bugs de clip-path */
+    z-index: 20;        /* <-- AGREGADO: Asegura que esté por encima de todo */
+    transition: all 0.3s ease;
+    clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+    animation: pulse-yellow 2s infinite;
+    will-change: transform, box-shadow; /* <-- AGREGADO: Mejora el renderizado */
+}
 
         .cta-button:hover {
             transform: scale(1.05) translateY(-5px);
@@ -166,6 +175,9 @@
             font-style: italic;
         }
 
+        /* ============================================
+           SECCIÓN DE CONFIANZA (EL PITCH)
+           ============================================ */
         .trust-section {
             padding: 6rem 1rem;
             max-width: 1200px;
@@ -239,6 +251,9 @@
             font-size: 0.95rem;
         }
 
+        /* ============================================
+           SECCIÓN "SIN PREGUNTAS"
+           ============================================ */
         .no-questions-section {
             background: linear-gradient(135deg, rgba(255, 215, 0, 0.05) 0%, rgba(0, 0, 0, 0) 100%);
             border-top: 1px solid rgba(255, 215, 0, 0.2);
@@ -270,6 +285,9 @@
             line-height: 1.7;
         }
 
+        /* ============================================
+           TESTIMONIOS (ESTILO CYBER)
+           ============================================ */
         .testimonials {
             padding: 4rem 1rem;
             max-width: 1000px;
@@ -322,6 +340,9 @@
             color: #fff;
         }
 
+        /* ============================================
+           FOOTER
+           ============================================ */
         .terminal-footer {
             text-align: center;
             padding: 4rem 1rem;
@@ -331,17 +352,22 @@
             letter-spacing: 0.1em;
         }
 
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease;
-        }
+        /* ============================================
+           ANIMACIONES DE ENTRADA
+           ============================================ */
+/* CORRECCIÓN PARA LA ANIMACIÓN DE APARICIÓN */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease;
+    will-change: opacity, transform; /* <-- AGREGADO: Ayuda al navegador a "despertar" el elemento */
+}
 
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+        /* Responsive */
         @media (max-width: 768px) {
             .cta-button {
                 padding: 1.2rem 2rem;
@@ -360,10 +386,12 @@
 
     <div class="grid-bg"></div>
 
+    <!-- CORREGIDO: Ruta relativa al directorio padre -->
     <a href="../services.html" class="back-link" aria-label="Volver a la página de servicios">← VOLVER AL TERMINAL</a>
 
     <div id="main-content">
         
+        <!-- HERO SECTION -->
         <section class="hero">
             <div class="hero-badge reveal">¿METIDO EN UN LÍO?</div>
             <h1 class="reveal">
@@ -383,6 +411,7 @@
             </p>
         </section>
 
+        <!-- PITCH DE CONFIANZA -->
         <section class="trust-section">
             <h2 class="section-title reveal">¿POR QUÉ KRYKOLS?</h2>
             
@@ -407,6 +436,7 @@
             </div>
         </section>
 
+        <!-- SECCIÓN SIN PREGUNTAS -->
         <section class="no-questions-section reveal">
             <h2>NO HACEMOS <span>PREGUNTAS</span>.</h2>
             <p>
@@ -420,6 +450,7 @@
             </a>
         </section>
 
+        <!-- TESTIMONIOS -->
         <section class="testimonials">
             <h2 class="section-title reveal">CASOS DE ÉXITO</h2>
             
@@ -438,6 +469,7 @@
             </div>
         </section>
 
+        <!-- FOOTER -->
         <footer class="terminal-footer">
             <p>© 2026 KRYKOLS SYSTEMS · CONSULTORÍA LEGAL ESTRATÉGICA</p>
             <p style="margin-top: 0.5rem; font-size: 0.625rem;">
@@ -449,14 +481,16 @@
     </div>
 
     <script>
-        // CORRECCIÓN: Función mejorada con umbral más permisivo
+        // ============================================
+        // ANIMACIÓN DE APARICIÓN AL HACER SCROLL
+        // ============================================
         function revealOnScroll() {
             const reveals = document.querySelectorAll('.reveal');
-            const windowHeight = window.innerHeight;
             
             for (let i = 0; i < reveals.length; i++) {
+                const windowHeight = window.innerHeight;
                 const elementTop = reveals[i].getBoundingClientRect().top;
-                const elementVisible = 150; // Aumentado de 100 a 150
+                const elementVisible = 100;
                 
                 if (elementTop < windowHeight - elementVisible) {
                     reveals[i].classList.add('active');
@@ -465,16 +499,14 @@
         }
 
         window.addEventListener('scroll', revealOnScroll);
-        
-        // CORRECCIÓN: Ejecutar múltiples veces al cargar
-        window.addEventListener('load', () => {
-            revealOnScroll();
-            setTimeout(revealOnScroll, 100);
-            setTimeout(revealOnScroll, 500);
-        });
+        // Disparar una vez al cargar para los elementos visibles inicialmente
+        revealOnScroll();
 
+        // ============================================
+        // EFECTO GLITCH SUTIL EN EL TÍTULO
+        // ============================================
         const title = document.querySelector('.hero h1');
-        if (title) {
+        if (title) { // Validación de seguridad para evitar errores en consola
             setInterval(() => {
                 if (Math.random() > 0.95) {
                     title.style.textShadow = '4px 4px 0px rgba(255, 0, 0, 0.4), -2px -2px 0px rgba(0, 255, 191, 0.4)';
