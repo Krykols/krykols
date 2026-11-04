@@ -6,7 +6,7 @@
     <title>Neural Feed | Krykols Blog</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 
     <style>
         :root {
@@ -52,34 +52,96 @@
         }
 
         /* ============================================
-           HEADER
+           BARRA SUPERIOR (VOLVER + BMI)
            ============================================ */
-        .blog-header {
-            text-align: center;
-            margin-bottom: 4rem;
-            padding-top: 2rem;
+        .top-controls {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
         }
 
         .back-link {
-            position: absolute;
-            top: 2rem;
-            left: 1.5rem;
             color: var(--neon-cyan);
             text-decoration: none;
             font-family: 'Orbitron', sans-serif;
-            font-size: 0.8rem;
-            letter-spacing: 0.15em;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
             border: 1px solid var(--neon-cyan);
-            padding: 0.5rem 1rem;
+            padding: 0.4rem 0.8rem;
             transition: all 0.3s ease;
             background: rgba(0, 243, 255, 0.05);
+            display: inline-flex;
+            align-items: center;
         }
 
         .back-link:hover {
             background: var(--neon-cyan);
             color: #000;
             box-shadow: 0 0 15px var(--neon-cyan);
+        }
+
+        /* Indicador BMI Compacto y Particular */
+        .bmi-status-bar {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-family: 'Share Tech Mono', monospace; /* Fuente técnica/monoespaciada */
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 0.05em;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 0.4rem 0.8rem;
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            border-left: 2px solid #00ff88;
+            border-radius: 2px;
+            backdrop-filter: blur(4px);
+        }
+
+        .bmi-dot-compact {
+            width: 6px;
+            height: 6px;
+            background: #00ff88;
+            border-radius: 50%;
+            box-shadow: 0 0 6px rgba(0, 255, 136, 0.8);
+            animation: bmiPulse 2s infinite;
+        }
+
+        @keyframes bmiPulse {
+            0%, 100% { opacity: 1; box-shadow: 0 0 6px rgba(0, 255, 136, 0.8); }
+            50% { opacity: 0.4; box-shadow: 0 0 3px rgba(0, 255, 136, 0.4); }
+        }
+
+        .bmi-text-compact {
+            color: #00ff88;
+            font-weight: 700;
+        }
+
+        .bmi-latency-compact {
+            display: flex;
+            align-items: baseline;
+            gap: 0.2rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .latency-value-compact {
+            font-weight: 900;
+            font-size: 0.85rem;
+            min-width: 18px;
+            text-align: right;
+            color: var(--neon-cyan);
+            transition: color 0.3s ease;
+        }
+
+        /* ============================================
+           HEADER
+           ============================================ */
+        .blog-header {
+            text-align: center;
+            margin-bottom: 4rem;
         }
 
         .blog-header h1 {
@@ -91,7 +153,7 @@
             background: linear-gradient(90deg, #fff, var(--neon-cyan), var(--neon-purple));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
+            background-clip: text; /* Estándar para compatibilidad */
             margin-bottom: 1rem;
         }
 
@@ -113,6 +175,7 @@
             letter-spacing: 0.2em;
             text-transform: uppercase;
             border-radius: 2px;
+            font-family: 'Orbitron', sans-serif;
         }
 
         /* ============================================
@@ -147,7 +210,6 @@
             transform: translateY(0);
         }
 
-        /* Artículo destacado (ocupa 2 columnas y 2 filas) */
         .article-card.featured {
             grid-column: span 2;
             grid-row: span 2;
@@ -166,13 +228,8 @@
             cursor: pointer;
         }
 
-        .article-card.featured .card-image-wrapper {
-            height: 400px;
-        }
-
-        .article-card:not(.featured) .card-image-wrapper {
-            height: 200px;
-        }
+        .article-card.featured .card-image-wrapper { height: 400px; }
+        .article-card:not(.featured) .card-image-wrapper { height: 200px; }
 
         .card-image-wrapper img {
             width: 100%;
@@ -188,25 +245,27 @@
         .card-overlay {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(to top, rgba(5,5,8,0.9) 0%, rgba(5,5,8,0) 60%);
+            background: linear-gradient(to top, rgba(5,5,8,0.95) 0%, rgba(5,5,8,0.4) 40%, rgba(5,5,8,0) 70%);
             pointer-events: none;
         }
 
-.card-category {
-    position: absolute;
-    bottom: 1rem;   /* 👈 Cambiado de top a bottom */
-    left: 1rem;
-    background: rgba(0, 0, 0, 0.7);
-    color: var(--neon-cyan);
-    padding: 0.25rem 0.75rem;
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    border-left: 2px solid var(--neon-cyan);
-    z-index: 2;     /* 👈 Asegura que esté sobre el overlay */
-    backdrop-filter: blur(4px); /* 👈 Efecto vidrio sutil para legibilidad */
-}
+        /* ETIQUETA EN ESQUINA INFERIOR IZQUIERDA */
+        .card-category {
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
+            background: rgba(0, 0, 0, 0.7);
+            color: var(--neon-cyan);
+            padding: 0.25rem 0.75rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border-left: 2px solid var(--neon-cyan);
+            z-index: 2;
+            backdrop-filter: blur(4px);
+            font-family: 'Orbitron', sans-serif;
+        }
 
         .card-content {
             padding: 1.5rem;
@@ -216,10 +275,10 @@
         }
 
         .card-date {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: rgba(255, 255, 255, 0.4);
             margin-bottom: 0.5rem;
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Share Tech Mono', monospace;
         }
 
         .card-title {
@@ -233,13 +292,8 @@
             transition: color 0.3s ease;
         }
 
-        .card-title:hover {
-            color: var(--neon-cyan);
-        }
-
-        .article-card.featured .card-title {
-            font-size: 1.75rem;
-        }
+        .card-title:hover { color: var(--neon-cyan); }
+        .article-card.featured .card-title { font-size: 1.75rem; }
 
         .card-excerpt {
             font-size: 0.95rem;
@@ -273,15 +327,9 @@
             transition: gap 0.3s ease;
         }
 
-        .read-more:hover {
-            gap: 0.8rem;
-        }
+        .read-more:hover { gap: 0.8rem; }
 
-        .like-container {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
+        .like-container { display: flex; align-items: center; gap: 0.5rem; }
 
         .like-btn {
             background: transparent;
@@ -331,7 +379,7 @@
         }
 
         /* ============================================
-           FOOTER
+           FOOTER & RESPONSIVE
            ============================================ */
         .blog-footer {
             text-align: center;
@@ -343,38 +391,17 @@
             letter-spacing: 0.1em;
         }
 
-        /* ============================================
-           RESPONSIVE
-           ============================================ */
         @media (max-width: 900px) {
-            .magazine-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .article-card.featured {
-                grid-column: span 2;
-                grid-row: span 1;
-            }
-            .article-card.featured .card-image-wrapper {
-                height: 300px;
-            }
+            .magazine-grid { grid-template-columns: repeat(2, 1fr); }
+            .article-card.featured { grid-column: span 2; grid-row: span 1; }
+            .article-card.featured .card-image-wrapper { height: 300px; }
         }
 
         @media (max-width: 600px) {
-            .magazine-grid {
-                grid-template-columns: 1fr;
-            }
-            .article-card.featured {
-                grid-column: span 1;
-            }
-            .blog-header h1 {
-                font-size: 2rem;
-            }
-            .back-link {
-                position: relative;
-                top: 0; left: 0;
-                display: inline-block;
-                margin-bottom: 2rem;
-            }
+            .magazine-grid { grid-template-columns: 1fr; }
+            .article-card.featured { grid-column: span 1; }
+            .blog-header h1 { font-size: 2rem; }
+            .top-controls { justify-content: center; }
         }
     </style>
 </head>
@@ -384,7 +411,20 @@
     <canvas id="neural-canvas"></canvas>
 
     <div class="main-container">
-        <a href="../../services.html" class="back-link">← Volver al Sistema</a>
+        
+        <!-- BARRA SUPERIOR: VOLVER + INDICADOR BMI -->
+        <div class="top-controls">
+            <a href="../../services.html" class="back-link">← Volver al Sistema</a>
+            
+            <div class="bmi-status-bar">
+                <div class="bmi-dot-compact"></div>
+                <span class="bmi-text-compact">BMI</span>
+                <span style="color: rgba(255,255,255,0.2); margin: 0 0.2rem;">|</span>
+                <span class="bmi-latency-compact">
+                    PING: <span class="latency-value-compact" id="latencyValue">12</span>ms
+                </span>
+            </div>
+        </div>
 
         <header class="blog-header">
             <h1>NEURAL FEED</h1>
@@ -397,7 +437,6 @@
             <!-- ARTÍCULO DESTACADO -->
             <article class="article-card featured" data-id="art-001">
                 <div class="card-image-wrapper" onclick="window.location.href='articulo-bmi-legal.html'">
-                    <!-- REEMPLAZA ESTA URL CON: ../assets/images/blog-portada-1.jpg -->
                     <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=800&auto=format&fit=crop" alt="Interfaz Cerebro Computadora">
                     <div class="card-overlay"></div>
                     <span class="card-category">Marco Legal</span>
@@ -497,25 +536,44 @@
 
     <script>
         /* ============================================
-           1. SISTEMA DE LIKES (SIN CUENTAS, LOCALSTORAGE)
+           1. INDICADOR DE LATENCIA BMI (OSCILANTE 5-20ms)
            ============================================ */
-        // Inicializar o recuperar likes del almacenamiento local
+        function updateLatency() {
+            const latencyElement = document.getElementById('latencyValue');
+            if (!latencyElement) return;
+            
+            // Generar valor aleatorio entre 5 y 20
+            const newLatency = Math.floor(Math.random() * 16) + 5; 
+            
+            // Cambiar color según la latencia
+            if (newLatency <= 10) {
+                latencyElement.style.color = '#00ff88'; // Verde - excelente
+            } else if (newLatency <= 15) {
+                latencyElement.style.color = '#ffdd00'; // Amarillo - buena
+            } else {
+                latencyElement.style.color = '#ff8800'; // Naranja - aceptable
+            }
+            
+            latencyElement.textContent = newLatency;
+        }
+
+        // Actualizar cada segundo
+        setInterval(updateLatency, 1000);
+        updateLatency(); // Valor inicial
+
+        /* ============================================
+           2. SISTEMA DE LIKES (LOCALSTORAGE)
+           ============================================ */
         const storedLikes = JSON.parse(localStorage.getItem('krykols_blog_likes')) || {
-            'art-001': 2847,
-            'art-002': 1204,
-            'art-003': 956,
-            'art-004': 3102
+            'art-001': 2847, 'art-002': 1204, 'art-003': 956, 'art-004': 3102
         };
 
-        // Actualizar contadores visuales al cargar
         document.querySelectorAll('.article-card').forEach(card => {
             const id = card.getAttribute('data-id');
             const countSpan = card.querySelector('.like-count');
             const btn = card.querySelector('.like-btn');
             
             if (countSpan) countSpan.textContent = storedLikes[id].toLocaleString();
-
-            // Marcar como "liked" si el usuario ya dio like en este navegador
             if (localStorage.getItem(`liked_${id}`) === 'true') {
                 btn.classList.add('liked');
             }
@@ -526,50 +584,41 @@
             const countSpan = btn.querySelector('.like-count');
             
             if (hasLiked) {
-                // Quitar like
                 storedLikes[articleId]--;
                 localStorage.setItem(`liked_${articleId}`, 'false');
                 btn.classList.remove('liked');
             } else {
-                // Dar like
                 storedLikes[articleId]++;
                 localStorage.setItem(`liked_${articleId}`, 'true');
                 btn.classList.add('liked');
             }
             
-            // Guardar y actualizar vista
             localStorage.setItem('krykols_blog_likes', JSON.stringify(storedLikes));
             countSpan.textContent = storedLikes[articleId].toLocaleString();
         }
 
         /* ============================================
-           2. ANIMACIÓN DE ENTRADA (SCROLL REVEAL)
+           3. ANIMACIÓN DE ENTRADA (SCROLL REVEAL)
            ============================================ */
         const observer = new IntersectionObserver((entries) => {
             entries.forEach((entry, index) => {
                 if (entry.isIntersecting) {
-                    setTimeout(() => {
-                        entry.target.classList.add('visible');
-                    }, index * 100); // Efecto cascada
+                    setTimeout(() => { entry.target.classList.add('visible'); }, index * 100);
                     observer.unobserve(entry.target);
                 }
             });
         }, { threshold: 0.1 });
 
-        document.querySelectorAll('.article-card').forEach(card => {
-            observer.observe(card);
-        });
+        document.querySelectorAll('.article-card').forEach(card => observer.observe(card));
 
         /* ============================================
-           3. FONDO DE RED NEURONAL (CANVAS)
+           4. FONDO DE RED NEURONAL (CANVAS)
            ============================================ */
         const canvas = document.getElementById('neural-canvas');
         const ctx = canvas.getContext('2d');
-        
-        let width, height;
-        let particles = [];
-        const particleCount = 60; // Número de nodos
-        const connectionDistance = 150; // Distancia para conectar líneas
+        let width, height, particles = [];
+        const particleCount = 60;
+        const connectionDistance = 150;
 
         function resize() {
             width = canvas.width = window.innerWidth;
@@ -580,45 +629,36 @@
             constructor() {
                 this.x = Math.random() * width;
                 this.y = Math.random() * height;
-                this.vx = (Math.random() - 0.5) * 0.5; // Velocidad lenta
+                this.vx = (Math.random() - 0.5) * 0.5;
                 this.vy = (Math.random() - 0.5) * 0.5;
                 this.size = Math.random() * 2 + 1;
             }
-
             update() {
                 this.x += this.vx;
                 this.y += this.vy;
-
-                // Rebotar en los bordes
                 if (this.x < 0 || this.x > width) this.vx *= -1;
                 if (this.y < 0 || this.y > height) this.vy *= -1;
             }
-
             draw() {
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(0, 243, 255, 0.5)'; // Color cian
+                ctx.fillStyle = 'rgba(0, 243, 255, 0.5)';
                 ctx.fill();
             }
         }
 
         function initParticles() {
             particles = [];
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle());
-            }
+            for (let i = 0; i < particleCount; i++) particles.push(new Particle());
         }
 
         function animate() {
             ctx.clearRect(0, 0, width, height);
-            
-            // Dibujar conexiones primero (detrás de los nodos)
             for (let i = 0; i < particles.length; i++) {
                 for (let j = i + 1; j < particles.length; j++) {
                     const dx = particles[i].x - particles[j].x;
                     const dy = particles[i].y - particles[j].y;
                     const distance = Math.sqrt(dx * dx + dy * dy);
-
                     if (distance < connectionDistance) {
                         ctx.beginPath();
                         ctx.strokeStyle = `rgba(0, 243, 255, ${1 - distance / connectionDistance})`;
@@ -629,22 +669,11 @@
                     }
                 }
             }
-
-            // Dibujar y actualizar nodos
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-
+            particles.forEach(p => { p.update(); p.draw(); });
             requestAnimationFrame(animate);
         }
 
-        window.addEventListener('resize', () => {
-            resize();
-            initParticles();
-        });
-
-        // Iniciar
+        window.addEventListener('resize', () => { resize(); initParticles(); });
         resize();
         initParticles();
         animate();
