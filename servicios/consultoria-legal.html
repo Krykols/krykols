@@ -384,7 +384,8 @@
 
     <div class="grid-bg"></div>
 
-    <a href="services.html" class="back-link">← VOLVER AL TERMINAL</a>
+    <!-- CORREGIDO: Ruta relativa al directorio padre -->
+    <a href="../services.html" class="back-link" aria-label="Volver a la página de servicios">← VOLVER AL TERMINAL</a>
 
     <div id="main-content">
         
@@ -410,7 +411,7 @@
 
         <!-- PITCH DE CONFIANZA -->
         <section class="trust-section">
-            <h2 class="section-title reveal">¿POR QUÉ NYCKOLS?</h2>
+            <h2 class="section-title reveal">¿POR QUÉ KRYKOLS?</h2>
             
             <div class="features-grid">
                 <div class="feature-card reveal">
@@ -500,17 +501,19 @@
         revealOnScroll();
 
         // ============================================
-        // EFECTO GLITCH SUTIL EN EL TÍTULO (OPCIONAL)
+        // EFECTO GLITCH SUTIL EN EL TÍTULO
         // ============================================
         const title = document.querySelector('.hero h1');
-        setInterval(() => {
-            if (Math.random() > 0.95) {
-                title.style.textShadow = '4px 4px 0px rgba(255, 0, 0, 0.4), -2px -2px 0px rgba(0, 255, 191, 0.4)';
-                setTimeout(() => {
-                    title.style.textShadow = '4px 4px 0px rgba(255, 215, 0, 0.2)';
-                }, 100);
-            }
-        }, 2000);
+        if (title) { // Validación de seguridad para evitar errores en consola
+            setInterval(() => {
+                if (Math.random() > 0.95) {
+                    title.style.textShadow = '4px 4px 0px rgba(255, 0, 0, 0.4), -2px -2px 0px rgba(0, 255, 191, 0.4)';
+                    setTimeout(() => {
+                        title.style.textShadow = '4px 4px 0px rgba(255, 215, 0, 0.2)';
+                    }, 100);
+                }
+            }, 2000);
+        }
     </script>
 </body>
 </html>
