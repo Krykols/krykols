@@ -1,1 +1,675 @@
-alaaaaaaaa
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KRYKOLS | Soluciones Fuera del Manual</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-cyan: #00f3ff;
+            --saul-red: #ff2a2a;
+            --void-black: #050508;
+            --panel-glass: rgba(10, 10, 15, 0.75);
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--void-black);
+            color: var(--text-primary);
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.5;
+        }
+
+        /* ============================================
+           FONDO HOLOGRÁFICO ANIMADO (BLADE RUNNER)
+           ============================================ */
+        .city-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -3;
+            background: url('https://images.unsplash.com/photo-1574362848149-11496d93a7c7?q=80&w=1920&auto=format&fit=crop') no-repeat center center/cover;
+            /* Filtro para convertir la ciudad en un holograma cian/azul */
+            filter: grayscale(60%) sepia(30%) hue-rotate(170deg) brightness(0.3) contrast(1.3);
+            animation: hologram-breathe 12s ease-in-out infinite alternate;
+        }
+
+        @keyframes hologram-breathe {
+            0% { 
+                transform: scale(1); 
+                filter: grayscale(60%) sepia(30%) hue-rotate(170deg) brightness(0.3) contrast(1.3); 
+            }
+            100% { 
+                transform: scale(1.05); 
+                filter: grayscale(50%) sepia(40%) hue-rotate(175deg) brightness(0.4) contrast(1.4); 
+            }
+        }
+
+        /* Rejilla de perspectiva 3D en el suelo */
+        .hologram-grid {
+            position: fixed;
+            bottom: -20%;
+            left: -10%;
+            width: 120%;
+            height: 60%;
+            z-index: -2;
+            background-image: 
+                linear-gradient(rgba(0, 243, 255, 0.15) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.15) 1px, transparent 1px);
+            background-size: 60px 60px;
+            transform: perspective(400px) rotateX(60deg);
+            transform-origin: bottom center;
+            mask-image: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 80%);
+            -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 80%);
+            animation: grid-move 15s linear infinite;
+        }
+
+        @keyframes grid-move {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 60px; }
+        }
+
+        /* Haz de escaneo que baja por la pantalla */
+        .scan-beam {
+            position: fixed;
+            top: -50%;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(to bottom, transparent, rgba(0, 243, 255, 0.08), transparent);
+            z-index: -1;
+            animation: scan-down 10s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes scan-down {
+            0% { top: -50%; }
+            100% { top: 150%; }
+        }
+
+        /* Viñeta oscura para legibilidad del texto */
+        .vignette {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at center, transparent 30%, var(--void-black) 95%);
+            pointer-events: none;
+        }
+
+        /* Líneas de escaneo CRT */
+        .scan-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.2),
+                rgba(0, 0, 0, 0.2) 1px,
+                transparent 1px,
+                transparent 3px
+            );
+            pointer-events: none;
+            z-index: 998;
+            opacity: 0.5;
+        }
+
+        /* ============================================
+           BARRA SUPERIOR FIJA (CTA INMEDIATO)
+           ============================================ */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1rem 2rem;
+            background: rgba(5, 5, 8, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 42, 42, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .brand {
+            font-family: 'Anton', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 0.1em;
+            color: var(--text-primary);
+        }
+
+        .brand span {
+            color: var(--saul-red);
+        }
+
+        .cta-top {
+            background: var(--saul-red);
+            color: white;
+            text-decoration: none;
+            font-family: 'Anton', sans-serif;
+            font-size: 1.1rem;
+            letter-spacing: 0.1em;
+            padding: 0.6rem 1.5rem;
+            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+            transition: all 0.3s ease;
+            animation: pulse-red 2s infinite;
+        }
+
+        @keyframes pulse-red {
+            0%, 100% { box-shadow: 0 0 10px rgba(255, 42, 42, 0.4); }
+            50% { box-shadow: 0 0 25px rgba(255, 42, 42, 0.8); }
+        }
+
+        .cta-top:hover {
+            background: #ff5555;
+            transform: scale(1.05);
+        }
+
+        /* ============================================
+           HERO SECTION (IMPACTO INMEDIATO)
+           ============================================ */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 6rem 2rem 4rem;
+            position: relative;
+        }
+
+        .hero-tag {
+            display: inline-block;
+            border: 1px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            padding: 0.4rem 1.2rem;
+            font-size: 0.9rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            background: rgba(0, 243, 255, 0.05);
+            backdrop-filter: blur(4px);
+        }
+
+        .hero h1 {
+            font-family: 'Anton', sans-serif;
+            font-size: clamp(3.5rem, 10vw, 8rem);
+            line-height: 0.9;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            position: relative;
+            color: white;
+            text-shadow: 0 0 30px rgba(0, 243, 255, 0.4);
+        }
+
+        .hero h1 .highlight {
+            color: var(--saul-red);
+            display: block;
+            font-size: 0.6em;
+            letter-spacing: 0.05em;
+            margin-top: 0.5rem;
+            text-shadow: 0 0 20px rgba(255, 42, 42, 0.5);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            max-width: 650px;
+            margin-bottom: 3rem;
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .cta-main {
+            display: inline-block;
+            background: transparent;
+            color: var(--neon-cyan);
+            font-family: 'Anton', sans-serif;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            text-decoration: none;
+            padding: 1.5rem 4rem;
+            border: 2px solid var(--neon-cyan);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            backdrop-filter: blur(4px);
+        }
+
+        .cta-main::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--neon-cyan);
+            transition: left 0.4s ease;
+            z-index: -1;
+        }
+
+        .cta-main:hover {
+            color: var(--void-black);
+            box-shadow: 0 0 50px rgba(0, 243, 255, 0.6);
+        }
+
+        .cta-main:hover::before {
+            left: 0;
+        }
+
+        /* ============================================
+           MARQUEE INFINITO (ESTILO PUBLICITARIO)
+           ============================================ */
+        .marquee-container {
+            background: var(--saul-red);
+            padding: 1rem 0;
+            overflow: hidden;
+            white-space: nowrap;
+            border-top: 2px solid white;
+            border-bottom: 2px solid white;
+            transform: rotate(-1deg) scale(1.02);
+            margin: 2rem 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 20s linear infinite;
+            font-family: 'Anton', sans-serif;
+            font-size: 1.5rem;
+            color: white;
+            letter-spacing: 0.1em;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* ============================================
+           SECCIÓN DE CONVICCIÓN (TARJETAS HOLOGRÁFICAS)
+           ============================================ */
+        .conviction {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-family: 'Anton', sans-serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            text-transform: uppercase;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--neon-cyan);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--panel-glass);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2.5rem;
+            position: relative;
+            backdrop-filter: blur(8px);
+            transition: all 0.4s ease;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            right: -1px;
+            bottom: -1px;
+            background: linear-gradient(45deg, var(--neon-cyan), transparent, var(--saul-red));
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: transparent;
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-number {
+            font-family: 'Anton', sans-serif;
+            font-size: 3rem;
+            color: rgba(255, 255, 255, 0.05);
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+        }
+
+        .card h3 {
+            font-family: 'Anton', sans-serif;
+            font-size: 1.8rem;
+            color: var(--neon-cyan);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .card p {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        /* ============================================
+           ESTADÍSTICAS DE PODER
+           ============================================ */
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            padding: 4rem 2rem;
+            background: rgba(255, 42, 42, 0.05);
+            border-top: 1px solid rgba(255, 42, 42, 0.2);
+            border-bottom: 1px solid rgba(255, 42, 42, 0.2);
+            margin: 4rem 0;
+            position: relative;
+            z-index: 10;
+            backdrop-filter: blur(4px);
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .stat-number {
+            font-family: 'Anton', sans-serif;
+            font-size: clamp(3rem, 6vw, 5rem);
+            color: var(--saul-red);
+            line-height: 1;
+            text-shadow: 0 0 20px rgba(255, 42, 42, 0.4);
+        }
+
+        .stat-label {
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* ============================================
+           LA GARANTÍA (ESTILO SAUL)
+           ============================================ */
+        .guarantee {
+            max-width: 900px;
+            margin: 0 auto 6rem;
+            padding: 3rem;
+            border: 2px solid var(--neon-cyan);
+            background: rgba(0, 243, 255, 0.03);
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            backdrop-filter: blur(8px);
+        }
+
+        .guarantee::after {
+            content: 'CLASIFICADO';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--void-black);
+            padding: 0 1.5rem;
+            color: var(--neon-cyan);
+            font-family: 'Anton', sans-serif;
+            letter-spacing: 0.2em;
+            font-size: 1.2rem;
+            border: 1px solid var(--neon-cyan);
+        }
+
+        .guarantee h2 {
+            font-family: 'Anton', sans-serif;
+            font-size: 2.5rem;
+            color: white;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+        }
+
+        .guarantee p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .guarantee strong {
+            color: var(--saul-red);
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            position: relative;
+            z-index: 10;
+            background: var(--void-black);
+        }
+
+        .footer-warning {
+            color: var(--saul-red);
+            margin-top: 1rem;
+            font-weight: 600;
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 768px) {
+            .top-bar {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .hero {
+                padding-top: 8rem;
+            }
+            
+            .marquee-container {
+                transform: rotate(0) scale(1);
+            }
+            
+            .stats {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .hologram-grid {
+                display: none; /* Mejora el rendimiento en móviles */
+            }
+        }
+
+        /* Animación de entrada */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CAPAS DEL FONDO HOLOGRÁFICO -->
+    <div class="city-bg"></div>
+    <div class="hologram-grid"></div>
+    <div class="scan-beam"></div>
+    <div class="vignette"></div>
+    <div class="scan-overlay"></div>
+
+    <!-- BARRA SUPERIOR FIJA: LO PRIMERO QUE SE VE -->
+    <header class="top-bar">
+        <div class="brand">KRYKOLS <span>SYSTEMS</span></div>
+        <a href="agendarconsulta.html" class="cta-top">AGENDAR CITA AHORA</a>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="hero-tag">Protocolo de Emergencia Activo</div>
+        <h1>
+            TU REALIDAD ES<br>
+            <span class="highlight">NEGOCIABLE</span>
+        </h1>
+        <p>
+            Cuando el sistema falla, nosotros somos el atajo. 
+            Soluciones legales, extrajudiciales y creativas para problemas que otros abogados no se atreven a tocar. 
+            Sin preguntas. Sin juicios. Solo resultados.
+        </p>
+        <a href="agendarconsulta.html" class="cta-main">AGENDAR CITA AHORA</a>
+    </section>
+
+    <!-- MARQUEE PUBLICITARIO AGRESIVO -->
+    <div class="marquee-container">
+        <div class="marquee-content">
+            DISCRECIÓN ABSOLUTA • RESOLUCIÓN EXTRAPROCESAL • BLINDAJE DE ACTIVOS • OPERAMOS DONDE LA LEY TERMINA Y LA NECESIDAD COMIENZA • DISCRECIÓN ABSOLUTA • RESOLUCIÓN EXTRAPROCESAL • BLINDAJE DE ACTIVOS • OPERAMOS DONDE LA LEY TERMINA Y LA NECESIDAD COMIENZA •
+        </div>
+    </div>
+
+    <!-- SECCIÓN DE CONVICCIÓN -->
+    <section class="conviction">
+        <div class="section-header fade-in">
+            <p>Por qué los que saben, nos eligen</p>
+            <h2>Ingeniería de Soluciones</h2>
+        </div>
+
+        <div class="grid">
+            <div class="card fade-in">
+                <div class="card-number">01</div>
+                <h3>Gestión de Crisis</h3>
+                <p>¿Una auditoría inesperada? ¿Un socio que habla de más? Actuamos en las primeras 24 horas para contener, desviar y neutralizar la amenaza antes de que se convierta en un expediente.</p>
+            </div>
+
+            <div class="card fade-in">
+                <div class="card-number">02</div>
+                <h3>Arquitectura de Activos</h3>
+                <p>No solo defendemos tu patrimonio; lo hacemos invisible. Estructuras corporativas en jurisdicciones opacas y fideicomisos que ni el sistema más agresivo puede rastrear.</p>
+            </div>
+
+            <div class="card fade-in">
+                <div class="card-number">03</div>
+                <h3>Resolución en la Sombra</h3>
+                <p>Los tribunales son para el público. Nosotros preferimos el silencio. Negociamos, presionamos y resolvemos el 90% de los conflictos antes de que un juez sepa que existen.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ESTADÍSTICAS DE PODER -->
+    <section class="stats fade-in">
+        <div class="stat-box">
+            <div class="stat-number">14+</div>
+            <div class="stat-label">Años Operando</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">0</div>
+            <div class="stat-label">Filtraciones de Clientes</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">97%</div>
+            <div class="stat-label">Tasa de Resolución</div>
+        </div>
+    </section>
+
+    <!-- LA GARANTÍA -->
+    <section class="guarantee fade-in">
+        <h2>La Garantía Krykols</h2>
+        <p>
+            Evaluamos tu situación en los primeros 15 minutos de la consulta. 
+            Si no vemos un camino claro hacia la victoria, <strong>no tomamos el caso y no cobramos un centavo.</strong> 
+            Pero si hay un camino, lo vamos a abrir, aunque tengamos que doblar las reglas del juego.
+        </p>
+        <a href="agendarconsulta.html" class="cta-main" style="font-size: 1.5rem; padding: 1rem 3rem; border-color: var(--saul-red); color: var(--saul-red);">
+            QUIERO MI EVALUACIÓN GRATUITA
+        </a>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>© 2026 KRYKOLS SYSTEMS. TODOS LOS DERECHOS RESERVADOS.</p>
+        <p class="footer-warning">
+            AVISO: LA INFORMACIÓN CONTENIDA EN ESTE SITIO ES DE CARÁCTER CONFIDENCIAL. 
+            NINGUNA COMUNICACIÓN PREVIA A LA FIRMA DE UN CONTRATO DE REPRESENTACIÓN CONSTITUYE ASESORAMIENTO LEGAL FORMAL.
+        </p>
+    </footer>
+
+    <script>
+        // Animación de aparición al hacer scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
