@@ -131,26 +131,27 @@
             line-height: 1.6;
         }
 
-        /* EL BOTÓN ESTRELLA */.cta-button {
-    display: inline-block;
-    background: var(--neon-yellow);
-    color: #000;
-    font-family: 'Oswald', sans-serif;
-    font-size: clamp(1.2rem, 3vw, 1.8rem);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    padding: 1.5rem 4rem;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    position: relative; /* <-- AGREGADO: Corrige bugs de clip-path */
-    z-index: 20;        /* <-- AGREGADO: Asegura que esté por encima de todo */
-    transition: all 0.3s ease;
-    clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
-    animation: pulse-yellow 2s infinite;
-    will-change: transform, box-shadow; /* <-- AGREGADO: Mejora el renderizado */
-}
+        /* EL BOTÓN ESTRELLA */
+        .cta-button {
+            display: inline-block;
+            background: var(--neon-yellow);
+            color: #000;
+            font-family: 'Oswald', sans-serif;
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 1.5rem 4rem;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            position: relative; /* Corrige bugs de clip-path */
+            z-index: 20;        /* Asegura que esté por encima de todo */
+            transition: all 0.3s ease;
+            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+            animation: pulse-yellow 2s infinite;
+            will-change: transform, box-shadow; /* Mejora el renderizado */
+        }
 
         .cta-button:hover {
             transform: scale(1.05) translateY(-5px);
@@ -237,16 +238,18 @@
             color: var(--neon-yellow);
         }
 
+        /* FORZAR VISIBILIDAD DEL TEXTO EN LAS TARJETAS */
         .feature-card h3 {
             font-family: 'Oswald', sans-serif;
             font-size: 1.5rem;
             text-transform: uppercase;
             margin-bottom: 1rem;
             letter-spacing: 0.05em;
+            color: #ffffff; /* Blanco puro, sin transparencia */
         }
 
         .feature-card p {
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(255, 255, 255, 0.85); /* Un poco más brillante para asegurar contraste */
             line-height: 1.6;
             font-size: 0.95rem;
         }
@@ -353,20 +356,20 @@
         }
 
         /* ============================================
-           ANIMACIONES DE ENTRADA
+           ANIMACIONES DE ENTRADA (A PRUEBA DE FALLOS)
            ============================================ */
-/* CORRECCIÓN PARA LA ANIMACIÓN DE APARICIÓN */
-.reveal {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.8s ease;
-    will-change: opacity, transform; /* <-- AGREGADO: Ayuda al navegador a "despertar" el elemento */
-}
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            will-change: opacity, transform;
+        }
 
-.reveal.active {
-    opacity: 1;
-    transform: translateY(0);
-}
+        .reveal.active {
+            opacity: 1 !important; /* !important garantiza que se muestre */
+            transform: translateY(0) !important;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .cta-button {
@@ -386,7 +389,6 @@
 
     <div class="grid-bg"></div>
 
-    <!-- CORREGIDO: Ruta relativa al directorio padre -->
     <a href="../services.html" class="back-link" aria-label="Volver a la página de servicios">← VOLVER AL TERMINAL</a>
 
     <div id="main-content">
@@ -481,41 +483,43 @@
     </div>
 
     <script>
-        // ============================================
-        // ANIMACIÓN DE APARICIÓN AL HACER SCROLL
-        // ============================================
-        function revealOnScroll() {
+        document.addEventListener("DOMContentLoaded", function() {
+            // 1. Seleccionar todos los elementos que deben aparecer
             const reveals = document.querySelectorAll('.reveal');
             
-            for (let i = 0; i < reveals.length; i++) {
-                const windowHeight = window.innerHeight;
-                const elementTop = reveals[i].getBoundingClientRect().top;
-                const elementVisible = 100;
-                
-                if (elementTop < windowHeight - elementVisible) {
-                    reveals[i].classList.add('active');
-                }
+            // 2. Configurar el observador de intersección (Estándar moderno, nunca falla)
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    // Cuando el 15% del elemento sea visible, se activa
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        // Dejar de observar una vez que ya apareció (mejora el rendimiento)
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.15, 
+                rootMargin: "0px 0px -50px 0px" // Margen para que se active un poco antes de llegar al fondo
+            });
+
+            // 3. Aplicar el observador a cada elemento
+            reveals.forEach(element => {
+                observer.observe(element);
+            });
+
+            // 4. Efecto Glitch del título (con validación de seguridad)
+            const title = document.querySelector('.hero h1');
+            if (title) {
+                setInterval(() => {
+                    if (Math.random() > 0.95) {
+                        title.style.textShadow = '4px 4px 0px rgba(255, 0, 0, 0.4), -2px -2px 0px rgba(0, 255, 191, 0.4)';
+                        setTimeout(() => {
+                            title.style.textShadow = '4px 4px 0px rgba(255, 215, 0, 0.2)';
+                        }, 100);
+                    }
+                }, 2000);
             }
-        }
-
-        window.addEventListener('scroll', revealOnScroll);
-        // Disparar una vez al cargar para los elementos visibles inicialmente
-        revealOnScroll();
-
-        // ============================================
-        // EFECTO GLITCH SUTIL EN EL TÍTULO
-        // ============================================
-        const title = document.querySelector('.hero h1');
-        if (title) { // Validación de seguridad para evitar errores en consola
-            setInterval(() => {
-                if (Math.random() > 0.95) {
-                    title.style.textShadow = '4px 4px 0px rgba(255, 0, 0, 0.4), -2px -2px 0px rgba(0, 255, 191, 0.4)';
-                    setTimeout(() => {
-                        title.style.textShadow = '4px 4px 0px rgba(255, 215, 0, 0.2)';
-                    }, 100);
-                }
-            }, 2000);
-        }
+        });
     </script>
 </body>
 </html>
